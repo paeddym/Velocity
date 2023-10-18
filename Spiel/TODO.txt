@@ -1,0 +1,26 @@
+TODO:
+
+Prio:
+- Bewegbarer Pixelballen
+- Strecke aus 2 Rechtecken bauen
+- Kollision zwischen Pixelballen und Strecke einfügen
+
+Must Have:
+- Pixelballen durch Sprite ersetzen
+- Animationen einfügen (Sprite ändern beim abbiegen etc.)
+- Partikeleffekte einfügen (Rauch aus Auspuff, Funken bei Kollisionen, Bremsspuren?)
+- Fahrphysik Programmieren
+- Kamera auf Spieler zentrieren, Transformation bei Kurven
+
+Nice to Have: 
+- 2. Spieler/ KI Gegner
+- Sound (BGM, SFX)
+- Item System
+- Mehrere Strecken/ Karts
+- Kart-/ Streckenauswahl in Hub-Menü
+
+Extra:
+- Cup System (Mehrer Rennen, Scoring)
+
+
+
