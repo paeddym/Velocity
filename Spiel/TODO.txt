@@ -4,6 +4,8 @@ Prio:
 - Bewegbarer Pixelballen
 - Strecke aus 2 Rechtecken bauen
 - Kollision zwischen Pixelballen und Strecke einfügen
+	- Streckenrand: Linien
+	- Pixelballen: Kreis
 
 Must Have:
 - Pixelballen durch Sprite ersetzen
@@ -15,6 +17,7 @@ Must Have:
 Nice to Have: 
 - 2. Spieler/ KI Gegner
 - Sound (BGM, SFX)
+- Verschiedene Fahrbahnoberflächen
 - Item System
 - Mehrere Strecken/ Karts
 - Kart-/ Streckenauswahl in Hub-Menü

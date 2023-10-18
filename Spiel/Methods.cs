@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-class Rendering
+namespace Velocity
 {
-
+    internal class Methods
+    {
+        //Quads
+    }
 }
