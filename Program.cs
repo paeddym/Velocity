@@ -1,7 +1,4 @@
-﻿using OpenTK.Graphics.OpenGL4;
-using OpenTK.Windowing.Common;
-using OpenTK.Windowing.Desktop;
-using OpenTK.Windowing.GraphicsLibraryFramework;
+﻿using System;
 
 namespace Velocity
 {
@@ -9,7 +6,10 @@ namespace Velocity
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("test");
+            using (Game game = new Game(800, 600, "LearnOpenTK"))
+            {
+                game.Run();
+            }
         }
     }
 }
