@@ -14,9 +14,9 @@ namespace Velocity{
         //    0.0f,  0.5f, 0.0f  // Top vertex
         //};
         float[] _vertices = {
-            -0.5f,  -0.5f, 0.0f,  // top right
-            0.5f, -0.5f, 0.0f,  // bottom right
-            0.0f, 0.5f, 0.0f,  // bottom left
+            -0.5f,  -0.5f, 0.0f,    1.0f, 0.0f, 0.0f, 
+            0.5f, -0.5f, 0.0f,      0.0f, 1.0f, 0.0f, 
+            0.0f, 0.5f, 0.0f,       0.0f, 0.0f, 1.0f, 
         };
         //uint[] _indices = {  // note that we start from 0!
         //    0, 1, 3,   // first triangle
@@ -53,8 +53,11 @@ namespace Velocity{
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
            // GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject);
 
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 0);
             GL.EnableVertexAttribArray(0);
+
+            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 3 * sizeof(float));
+            GL.EnableVertexAttribArray(1);
 
             base.OnLoad();
         }
@@ -65,16 +68,6 @@ namespace Velocity{
             _shader.Use();
             GL.BindVertexArray(_vertexArrayObject);
             //GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
-            
-            double timeValue = _timer.Elapsed.TotalSeconds;
-            float greenValue = (float)Math.Sin(timeValue) / 2.0f + 0.5f;
-            int vertexColorLocation = GL.GetUniformLocation(_shader.Handle, "ourColor");
-            if (vertexColorLocation == -1){
-                Console.WriteLine("Could not find ourColor");
-                Close();
-            }
-            GL.Uniform4(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
-
             //GL.DrawElements(PrimitiveType.Triangles, _indices.Length, DrawElementsType.UnsignedInt, 0);
             GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
             SwapBuffers();
