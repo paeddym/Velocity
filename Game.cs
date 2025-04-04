@@ -2,6 +2,7 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using OpenTK.Mathematics;
 
 
 namespace Velocity{
@@ -35,6 +36,10 @@ namespace Velocity{
             base(GameWindowSettings.Default, new NativeWindowSettings() { ClientSize = (width, height), Title = title }) {}
         protected override void OnLoad(){
             //ErrorChecker.InitializeGLDebugCallback();
+           Vector4 vec = new Vector4(1.0f, 0.0f, 0.0f, 1.0f);
+           Matrix4 trans = Matrix4.CreateTranslation(1f, 1f, 0.0f);
+           vec *= trans;
+           Console.WriteLine("{0}, {1}, {2}", vec.X, vec.Y, vec.Z);
 
             GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
@@ -75,6 +80,13 @@ namespace Velocity{
             var texCoordLocation = GL.GetAttribLocation(_shader.Handle,"aTexCoord");
             GL.EnableVertexAttribArray(texCoordLocation);
             GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 3 * sizeof(float));
+
+            Matrix4 rotation = Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(90.0f));
+            Matrix4 scale = Matrix4.CreateScale(0.5f, 0.5f, 0.5f);
+            trans = rotation * scale;
+
+            int matlocation = GL.GetUniformLocation(_shader.Handle, "transform");
+            GL.UniformMatrix4(matlocation, true, ref trans);
 
             base.OnLoad();
         }

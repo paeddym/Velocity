@@ -10,13 +10,14 @@ layout(location = 1) in vec2 aTexCoord;
 // Instead, we create an output variable so we can send that data to the fragment shader.
 
 out vec2 texCoord;
+uniform mat4 transform;
 
 void main(void)
 {
     // Then, we further the input texture coordinate to the output one.
     // texCoord can now be used in the fragment shader.
     
-    texCoord = aTexCoord;
+    texCoord = vec2(aTexCoord.x, aTexCoord.y);
 
-    gl_Position = vec4(aPosition, 1.0);
+    gl_Position = vec4(aPosition, 1.0) * transform;
 }
