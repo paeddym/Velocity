@@ -31,6 +31,7 @@ namespace Velocity{
         private Shader _shader;
         private Texture _texture;
         private Texture _texture2;
+        Matrix4 projection;
 
         public Game(int width, int height, string title) : 
             base(GameWindowSettings.Default, new NativeWindowSettings() { ClientSize = (width, height), Title = title }) {}
@@ -85,8 +86,21 @@ namespace Velocity{
             Matrix4 scale = Matrix4.CreateScale(0.5f, 0.5f, 0.5f);
             trans = rotation * scale;
 
+            Matrix4 model = Matrix4.CreateRotationX(MathHelper.DegreesToRadians(-55.0f));
+            Matrix4 view = Matrix4.CreateTranslation(0.0f, 0.0f, -3.0f);
+            projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+
             int matlocation = GL.GetUniformLocation(_shader.Handle, "transform");
             GL.UniformMatrix4(matlocation, true, ref trans);
+
+            int modelLocation = GL.GetUniformLocation(_shader.Handle, "model");
+            GL.UniformMatrix4(modelLocation, true, ref model);
+            
+            int viewLocation = GL.GetUniformLocation(_shader.Handle, "view");
+            GL.UniformMatrix4(viewLocation, true, ref view);
+
+            int projectionLocation =  GL.GetUniformLocation(_shader.Handle, "projection");
+            GL.UniformMatrix4(projectionLocation, true, ref projection);
 
             base.OnLoad();
         }
@@ -118,6 +132,7 @@ namespace Velocity{
 
         protected override void OnFramebufferResize(FramebufferResizeEventArgs e){
             GL.Viewport(0, 0, e.Width, e.Height);
+            projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), e.Width / e.Height, 0.1f, 100.0f);
             base.OnFramebufferResize(e);
         }
 
