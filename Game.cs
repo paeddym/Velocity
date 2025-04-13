@@ -68,6 +68,12 @@ namespace Velocity{
         private Texture _texture;
         private Texture _texture2;
         private double _time;
+        // Cube that can be moved
+        private double _xPos;
+        private double _yPos;
+        private double _zPos;
+        private double _xRot;
+        private double _yRot;
         Matrix4 projection;
         Matrix4 model;
 
@@ -127,18 +133,31 @@ namespace Velocity{
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             _shader.Use();
-            GL.BindVertexArray(_vertexArrayObject);
-
             _texture.Use(TextureUnit.Texture0);
             _texture2.Use(TextureUnit.Texture1);
-            
-            model = Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(_time));
 
             int modelLocation = GL.GetUniformLocation(_shader.Handle, "model");
+            GL.BindVertexArray(_vertexArrayObject);
+            
+            model = Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(_time));
+            model = model * Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(_time));
+            model = model * Matrix4.CreateTranslation(1.0f, 0.0f, -5.0f);
             GL.UniformMatrix4(modelLocation, true, ref model);
-
-
             GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
+
+            model = Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(-_time));
+            model = model * Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(-_time));
+            model = model * Matrix4.CreateTranslation(-1.0f, 0.0f, -2.0f);
+            GL.UniformMatrix4(modelLocation, true, ref model);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
+
+            model = Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(_time*10));
+            model = model * Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(_time*40));
+            model = model * Matrix4.CreateTranslation(0.0f, 1.0f, 0.0f);
+            GL.UniformMatrix4(modelLocation, true, ref model);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
+
+            moveCube();
 
             SwapBuffers();
         }
@@ -149,6 +168,66 @@ namespace Velocity{
             if (KeyboardState.IsKeyDown(Keys.Escape)){
                 Close();
             }
+        }
+
+        void moveCube() {
+            int modelLocation = GL.GetUniformLocation(_shader.Handle, "model");
+
+            if (KeyboardState.IsKeyDown(Keys.W)){
+                _yPos += 0.001f;
+                if (_yPos >= 1) {
+                    _yPos = 1;
+                }
+            }
+            if (KeyboardState.IsKeyDown(Keys.S)){
+                _yPos -= 0.001f;
+                if (_yPos <= -1) {
+                    _yPos = -1;
+                }
+            }
+            if (KeyboardState.IsKeyDown(Keys.A)){
+                _xPos -= 0.001f;
+                if (_xPos <= -1) {
+                    _xPos = -1;
+                }
+            }
+            if (KeyboardState.IsKeyDown(Keys.D)){
+                _xPos += 0.001f;
+                if (_xPos >= 1) {
+                    _xPos = 1;
+                }
+            }
+            if (KeyboardState.IsKeyDown(Keys.R)){
+                _yRot += 0.01f;
+            }
+            if (KeyboardState.IsKeyDown(Keys.F)){
+                _yRot -= 0.01f;
+            }
+            if (KeyboardState.IsKeyDown(Keys.G)){
+                _xRot += 0.01f;
+            }
+            if (KeyboardState.IsKeyDown(Keys.T)){
+                _xRot -= 0.01f;
+            }
+            if (KeyboardState.IsKeyDown(Keys.Y)){ // OpenTK uses Amerikan english keyboard layout, so Z and Y are swapped
+                _zPos -= 0.01f;
+                if (_zPos <= -10f) {
+                    _zPos = -10f;
+                }
+            }
+            if (KeyboardState.IsKeyDown(Keys.H)){
+                _zPos += 0.01f;
+                if (_zPos >= 3f) {
+                    _zPos = 3f;
+                }
+            }
+
+
+            model = Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(_xRot));
+            model = model * Matrix4.CreateRotationY((float) MathHelper.DegreesToRadians(_yRot));
+            model = model * Matrix4.CreateTranslation((float)_xPos, (float)_yPos, (float)_zPos);
+            GL.UniformMatrix4(modelLocation, true, ref model);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, 36);           
         }
 
         protected override void OnFramebufferResize(FramebufferResizeEventArgs e){
