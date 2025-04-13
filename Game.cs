@@ -84,7 +84,7 @@ namespace Velocity{
         Vector3 cameraRight;
         Vector3 cameraUp;
         Vector2 lastPos;
-        private float yaw;
+        private float yaw = -90;
         private float pitch;
 
         Matrix4 projection;
@@ -99,11 +99,11 @@ namespace Velocity{
             GL.Enable(EnableCap.DepthTest);
             
             // Create, compile and use the vertex and Fragmet shader
-            _shader = new Shader("shader.vert", "shader.frag");
+            _shader = new Shader("shaders/shader.vert", "shaders/shader.frag");
             _shader.Use();
             // Load textures and use them
-            _texture = new Texture("container.jpg");
-            _texture2 = new Texture("awesomeface.png");
+            _texture = new Texture("textures/container.jpg");
+            _texture2 = new Texture("textures/awesomeface.png");
             _shader.SetInt("texture1", 0);
             _shader.SetInt("texture2", 1);
 
@@ -304,6 +304,9 @@ namespace Velocity{
             front.Y = (float)Math.Sin(MathHelper.DegreesToRadians(pitch));
             front.Z = (float)Math.Cos(MathHelper.DegreesToRadians(pitch)) * (float)Math.Sin(MathHelper.DegreesToRadians(yaw));
             front = Vector3.Normalize(front);
+            Console.WriteLine(yaw);
+            Console.WriteLine(pitch);
+            Console.WriteLine(front);
 
             Matrix4 view = Matrix4.LookAt(position, position + front, up);
             int viewLocation = GL.GetUniformLocation(_shader.Handle, "view");
