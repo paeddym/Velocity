@@ -7,12 +7,7 @@ using OpenTK.Mathematics;
 
 namespace Velocity{
     public class Game : GameWindow {
-        //private readonly float[] _vertices =
-        //{
-        //    -0.5f, -0.5f, 0.0f, // Bottom-left vertex
-        //    0.5f, -0.5f, 0.0f, // Bottom-right vertex
-        //    0.0f,  0.5f, 0.0f  // Top vertex
-        //};
+
         float[] _vertices = {
             -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
             0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
@@ -56,10 +51,6 @@ namespace Velocity{
             -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
             -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
         };
-        uint[] _indices = {  // note that we start from 0!
-            0, 1, 3,   // first triangle
-            1, 2, 3    // second triangle
-        };
 
         private int _vertexBufferObject;
         private int _vertexArrayObject;
@@ -90,9 +81,17 @@ namespace Velocity{
         Matrix4 projection;
         Matrix4 model;
 
+        Groundplain testGround;
+
+        CubeGen cube1;
+        CubeGen cube2;
+        CubeGen cube3;
+
         public Game(int width, int height, string title) : 
             base(GameWindowSettings.Default, new NativeWindowSettings() { ClientSize = (width, height), Title = title }) {}
         protected override void OnLoad(){
+
+            ErrorChecker.InitializeGLDebugCallback();
             // Clear buffer color
             // Enable depth test so objects in the backround don't shine trhough objects in fornt
             GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -112,7 +111,6 @@ namespace Velocity{
             _vertexBufferObject = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
             GL.BufferData(BufferTarget.ArrayBuffer, _vertices.Length * sizeof(float), _vertices, BufferUsageHint.StaticDraw);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
 
             var vertexLocation = GL.GetAttribLocation(_shader.Handle,"aPosition");
             GL.EnableVertexAttribArray(vertexLocation);
@@ -122,18 +120,18 @@ namespace Velocity{
             GL.EnableVertexAttribArray(texCoordLocation);
             GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 3 * sizeof(float));
 
-            model = Matrix4.CreateRotationX(MathHelper.DegreesToRadians(-55.0f));
             projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-
-            int modelLocation = GL.GetUniformLocation(_shader.Handle, "model");
-            GL.UniformMatrix4(modelLocation, true, ref model);
 
             int projectionLocation =  GL.GetUniformLocation(_shader.Handle, "projection");
             GL.UniformMatrix4(projectionLocation, true, ref projection);
-            
 
-            // Initial camera Setup
+            testGround = new Groundplain(1.5f, 0.0f, 0.0f, _shader);
+            //CubeGen(float posX, float posY, float posZ, int VAO,Shader shader) 
+            cube1 = new CubeGen(1.0f, 1.0f, 1.0f, _vertexArrayObject, _shader);
+            cube2 = new CubeGen(-1.0f, -1.0f, -1.0f, _vertexArrayObject, _shader);
+            cube3 = new CubeGen(-5.0f, 0.0f, 0.0f, _vertexArrayObject, _shader);
             
+            // Initial camera Setup 
             position = new Vector3(0.0f, 0.0f, 3.0f);
             front = new Vector3(0.0f, 0.0f, -1.0f);
             up = new Vector3(0.0f, 1.0f, 0.0f);
@@ -146,7 +144,7 @@ namespace Velocity{
 
         protected override void OnRenderFrame(FrameEventArgs e){
             base.OnRenderFrame(e);
-            _time += 32.0f *  e.Time;
+            _time += 10.0f *  e.Time;
             _delatTime = e.Time;
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
@@ -154,30 +152,12 @@ namespace Velocity{
             _texture.Use(TextureUnit.Texture0);
             _texture2.Use(TextureUnit.Texture1);
 
-            int modelLocation = GL.GetUniformLocation(_shader.Handle, "model");
-            GL.BindVertexArray(_vertexArrayObject);
-            
-            model = Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(_time));
-            model = model * Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(_time));
-            model = model * Matrix4.CreateTranslation(1.0f, 0.0f, -5.0f);
-            GL.UniformMatrix4(modelLocation, true, ref model);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
-
-            model = Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(-_time));
-            model = model * Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(-_time));
-            model = model * Matrix4.CreateTranslation(-1.0f, 0.0f, -2.0f);
-            GL.UniformMatrix4(modelLocation, true, ref model);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
-
-            model = Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(_time*10));
-            model = model * Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(_time*40));
-            model = model * Matrix4.CreateTranslation(0.0f, 1.0f, 0.0f);
-            GL.UniformMatrix4(modelLocation, true, ref model);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
-
-            moveCube();
+            cube1.Draw();
+            cube2.Draw();
+            cube3.Draw();
+            testGround.Draw();;
+            //moveCube(); deactivated as is couses trouble with the drawing of other objects
             Camera();
-
             SwapBuffers();
         }
 
@@ -199,27 +179,15 @@ namespace Velocity{
             if (KeyboardState.IsKeyDown(Keys.RightShift)) {
                 if (KeyboardState.IsKeyDown(Keys.W)){
                     _yPos += 0.001f;
-                    if (_yPos >= 1) {
-                        _yPos = 1;
-                    }
                 }
                 if (KeyboardState.IsKeyDown(Keys.S)){
                     _yPos -= 0.001f;
-                    if (_yPos <= -1) {
-                        _yPos = -1;
-                    }
                 }
                 if (KeyboardState.IsKeyDown(Keys.A)){
                     _xPos -= 0.001f;
-                    if (_xPos <= -1) {
-                        _xPos = -1;
-                    }
                 }
                 if (KeyboardState.IsKeyDown(Keys.D)){
                     _xPos += 0.001f;
-                    if (_xPos >= 1) {
-                        _xPos = 1;
-                    }
                 }
                 if (KeyboardState.IsKeyDown(Keys.R)){
                     _yRot += 0.01f;
@@ -235,15 +203,9 @@ namespace Velocity{
                 }
                 if (KeyboardState.IsKeyDown(Keys.Y)){ // OpenTK uses Amerikan english keyboard layout, so Z and Y are swapped
                     _zPos -= 0.01f;
-                    if (_zPos <= -10f) {
-                        _zPos = -10f;
-                    }
                 }
                 if (KeyboardState.IsKeyDown(Keys.H)){
                     _zPos += 0.01f;
-                    if (_zPos >= 3f) {
-                        _zPos = 3f;
-                    }
                 }
             }
 
@@ -304,9 +266,6 @@ namespace Velocity{
             front.Y = (float)Math.Sin(MathHelper.DegreesToRadians(pitch));
             front.Z = (float)Math.Cos(MathHelper.DegreesToRadians(pitch)) * (float)Math.Sin(MathHelper.DegreesToRadians(yaw));
             front = Vector3.Normalize(front);
-            Console.WriteLine(yaw);
-            Console.WriteLine(pitch);
-            Console.WriteLine(front);
 
             Matrix4 view = Matrix4.LookAt(position, position + front, up);
             int viewLocation = GL.GetUniformLocation(_shader.Handle, "view");
