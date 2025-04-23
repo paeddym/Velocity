@@ -66,18 +66,6 @@ namespace Velocity{
         private double _xRot;
         private double _yRot;
         private double _delatTime;
-        // Camera
-        Vector3 position;
-        Vector3 cameraTarget;
-        Vector3 cameraDirection;
-        Vector3 up;
-        Vector3 front;
-        Vector3 cameraRight;
-        Vector3 cameraUp;
-        Vector2 lastPos;
-        private float yaw = -90;
-        private float pitch;
-
         Matrix4 projection;
         Matrix4 model;
 
@@ -86,6 +74,8 @@ namespace Velocity{
         CubeGen cube1;
         CubeGen cube2;
         CubeGen cube3;
+
+        Camera camera;
 
         public Game(int width, int height, string title) : 
             base(GameWindowSettings.Default, new NativeWindowSettings() { ClientSize = (width, height), Title = title }) {}
@@ -131,14 +121,10 @@ namespace Velocity{
             cube2 = new CubeGen(-1.0f, -1.0f, -1.0f, _vertexArrayObject, _shader);
             cube3 = new CubeGen(-5.0f, 0.0f, 0.0f, _vertexArrayObject, _shader);
             
-            // Initial camera Setup 
-            position = new Vector3(0.0f, 0.0f, 3.0f);
-            front = new Vector3(0.0f, 0.0f, -1.0f);
-            up = new Vector3(0.0f, 1.0f, 0.0f);
-            Matrix4 view = Matrix4.LookAt(position, position + front, up);
-            int viewLocation = GL.GetUniformLocation(_shader.Handle, "view");
-            GL.UniformMatrix4(viewLocation, true, ref view);
+            camera = new Camera(_shader);
+
             CursorState = CursorState.Grabbed;
+            
             base.OnLoad();
         }
 
@@ -155,121 +141,19 @@ namespace Velocity{
             cube1.Draw();
             cube2.Draw();
             cube3.Draw();
-            testGround.Draw();;
-            //moveCube(); deactivated as is couses trouble with the drawing of other objects
-            Camera();
+            testGround.Draw();
+
             SwapBuffers();
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e){
             base.OnUpdateFrame(e);
+            //Use(KeyboardState input, FrameEventArgs even, MouseState mouse, bool windoFocus)
+            camera.Use(KeyboardState, e, MouseState, IsFocused);   
 
             if (KeyboardState.IsKeyDown(Keys.Escape)){
                 Close();
             }
-        }
-
-        void moveCube() {
-            int modelLocation = GL.GetUniformLocation(_shader.Handle, "model");
-
-            if (!IsFocused) // check to see if the window is focused
-            {
-                return;
-            }
-            if (KeyboardState.IsKeyDown(Keys.RightShift)) {
-                if (KeyboardState.IsKeyDown(Keys.W)){
-                    _yPos += 0.001f;
-                }
-                if (KeyboardState.IsKeyDown(Keys.S)){
-                    _yPos -= 0.001f;
-                }
-                if (KeyboardState.IsKeyDown(Keys.A)){
-                    _xPos -= 0.001f;
-                }
-                if (KeyboardState.IsKeyDown(Keys.D)){
-                    _xPos += 0.001f;
-                }
-                if (KeyboardState.IsKeyDown(Keys.R)){
-                    _yRot += 0.01f;
-                }
-                if (KeyboardState.IsKeyDown(Keys.F)){
-                    _yRot -= 0.01f;
-                }
-                if (KeyboardState.IsKeyDown(Keys.G)){
-                    _xRot += 0.01f;
-                }
-                if (KeyboardState.IsKeyDown(Keys.T)){
-                    _xRot -= 0.01f;
-                }
-                if (KeyboardState.IsKeyDown(Keys.Y)){ // OpenTK uses Amerikan english keyboard layout, so Z and Y are swapped
-                    _zPos -= 0.01f;
-                }
-                if (KeyboardState.IsKeyDown(Keys.H)){
-                    _zPos += 0.01f;
-                }
-            }
-
-            model = Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(_xRot));
-            model = model * Matrix4.CreateRotationY((float) MathHelper.DegreesToRadians(_yRot));
-            model = model * Matrix4.CreateTranslation((float)_xPos, (float)_yPos, (float)_zPos);
-            GL.UniformMatrix4(modelLocation, true, ref model);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 36);           
-        }
-
-        void Camera() {
-            float speed = 1.5f;
-            KeyboardState input = KeyboardState;
-            if (!IsFocused || input.IsKeyDown(Keys.RightShift)) // check to see if the window is focused and right shift is pressed
-            {
-                return;
-            }
-
-            if (input.IsKeyDown(Keys.W))
-            {
-                position += front * speed * (float)_delatTime; //Forward 
-            }
-
-            if (input.IsKeyDown(Keys.S))
-            {
-                position -= front * speed * (float)_delatTime; //Backwards
-            }
-
-            if (input.IsKeyDown(Keys.A))
-            {
-                position -= Vector3.Normalize(Vector3.Cross(front, up)) * speed * (float)_delatTime; //Left
-            }
-
-            if (input.IsKeyDown(Keys.D))
-            {
-                position += Vector3.Normalize(Vector3.Cross(front, up)) * speed * (float)_delatTime; //Right
-            }
-
-            if (input.IsKeyDown(Keys.Space))
-            {
-                position += up * speed * (float)_delatTime; //Up 
-            }
-
-            if (input.IsKeyDown(Keys.LeftShift))
-            {
-                position -= up * speed * (float)_delatTime; //Down
-            }
-
-            // Mouse input
-            float deltaX = MouseState.X - lastPos.X;
-            float deltaY = MouseState.Y - lastPos.Y;
-            lastPos = new Vector2(MouseState.X, MouseState.Y);
-
-            yaw += deltaX * 0.05f;
-            pitch -= deltaY * 0.05f;
-
-            front.X = (float)Math.Cos(MathHelper.DegreesToRadians(pitch)) * (float)Math.Cos(MathHelper.DegreesToRadians(yaw));
-            front.Y = (float)Math.Sin(MathHelper.DegreesToRadians(pitch));
-            front.Z = (float)Math.Cos(MathHelper.DegreesToRadians(pitch)) * (float)Math.Sin(MathHelper.DegreesToRadians(yaw));
-            front = Vector3.Normalize(front);
-
-            Matrix4 view = Matrix4.LookAt(position, position + front, up);
-            int viewLocation = GL.GetUniformLocation(_shader.Handle, "view");
-            GL.UniformMatrix4(viewLocation, true, ref view);
         }
 
         protected override void OnFramebufferResize(FramebufferResizeEventArgs e){
