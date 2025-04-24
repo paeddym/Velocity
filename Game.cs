@@ -74,8 +74,13 @@ namespace Velocity{
         CubeGen cube1;
         CubeGen cube2;
         CubeGen cube3;
+        CubeGen cube4;
 
         Camera camera;
+
+        Car car;
+
+        private bool cameraFree = true;
 
         public Game(int width, int height, string title) : 
             base(GameWindowSettings.Default, new NativeWindowSettings() { ClientSize = (width, height), Title = title }) {}
@@ -120,8 +125,11 @@ namespace Velocity{
             cube1 = new CubeGen(1.0f, 1.0f, 1.0f, _vertexArrayObject, _shader);
             cube2 = new CubeGen(-1.0f, -1.0f, -1.0f, _vertexArrayObject, _shader);
             cube3 = new CubeGen(-5.0f, 0.0f, 0.0f, _vertexArrayObject, _shader);
+            cube4 = new CubeGen(0.0f, 0.0f, 0.0f, _vertexArrayObject, _shader);
             
             camera = new Camera(_shader);
+
+            car = new Car(_shader, camera);
 
             CursorState = CursorState.Grabbed;
             
@@ -141,15 +149,26 @@ namespace Velocity{
             cube1.Draw();
             cube2.Draw();
             cube3.Draw();
+            cube4.Draw();
             testGround.Draw();
+            car.Draw();
 
             SwapBuffers();
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e){
             base.OnUpdateFrame(e);
-            //Use(KeyboardState input, FrameEventArgs even, MouseState mouse, bool windoFocus)
-            camera.Use(KeyboardState, e, MouseState, IsFocused);   
+            //UseFreeCam(KeyboardState input, FrameEventArgs even, MouseState mouse, bool windoFocus)
+            if (cameraFree) {
+                camera.UseFreeCam(KeyboardState, e, MouseState, IsFocused);
+            }
+            if (!cameraFree) {
+            car.Drive(KeyboardState, e, cameraFree);
+            }
+
+            if (KeyboardState.IsKeyPressed(Keys.B)) {
+                cameraFree = !cameraFree;
+            }
 
             if (KeyboardState.IsKeyDown(Keys.Escape)){
                 Close();

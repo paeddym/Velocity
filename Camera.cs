@@ -1,7 +1,6 @@
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
-using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace Velocity {
@@ -19,6 +18,8 @@ namespace Velocity {
         private float yaw = -90;
         private float pitch;
         private Shader _shader;
+
+        private bool needReset = false;
         
         public Camera(Shader shader) {
             // Initial camera Setup 
@@ -31,9 +32,15 @@ namespace Velocity {
             GL.UniformMatrix4(viewLocation, true, ref view);
         }
 
-        public void Use(KeyboardState input, FrameEventArgs even, MouseState mouse, bool windoFocus){
+        public void UseFreeCam(KeyboardState input, FrameEventArgs even, MouseState mouse, bool windoFocus){
             float speed = 1.5f;
             float _delatTime = (float)even.Time; 
+
+            if (needReset) {
+                lastPos = new Vector2(mouse.X, mouse.Y);
+                resetCam();
+                needReset = false;
+            }
 
             if (!windoFocus || input.IsKeyDown(Keys.RightShift)) // check to see if the window is focused and right shift is pressed
             {
@@ -83,6 +90,27 @@ namespace Velocity {
             front.Z = (float)Math.Cos(MathHelper.DegreesToRadians(pitch)) * (float)Math.Sin(MathHelper.DegreesToRadians(yaw));
             front = Vector3.Normalize(front);
 
+            Matrix4 view = Matrix4.LookAt(position, position + front, up);
+            int viewLocation = GL.GetUniformLocation(_shader.Handle, "view");
+            GL.UniformMatrix4(viewLocation, true, ref view);
+        }
+
+        public void UseLockCam(float x, float y) {
+            needReset = true;
+
+            position = new Vector3(x, y, 3.0f);
+            front = new Vector3(0.0f, 0.0f, -1.0f);
+            up = new Vector3(0.0f, 1.0f, 0.0f);
+            Matrix4 view = Matrix4.LookAt(position, position + front, up);
+            int viewLocation = GL.GetUniformLocation(_shader.Handle, "view");
+            GL.UniformMatrix4(viewLocation, true, ref view);
+        }
+
+        private void resetCam() {
+            yaw = -90;
+            pitch = 0;
+            front = new Vector3(0.0f, 0.0f, -1.0f);
+            up = new Vector3(0.0f, 1.0f, 0.0f);
             Matrix4 view = Matrix4.LookAt(position, position + front, up);
             int viewLocation = GL.GetUniformLocation(_shader.Handle, "view");
             GL.UniformMatrix4(viewLocation, true, ref view);
