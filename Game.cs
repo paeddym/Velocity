@@ -176,10 +176,7 @@ namespace Velocity{
         }
 
         protected override void OnFramebufferResize(FramebufferResizeEventArgs e){
-            //GL.Viewport(0, 0, e.Width, e.Height);
-            //projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (e.Width / e.Height), 0.1f, 100.0f);
-            //base.OnFramebufferResize(e);
-            // Maintain a fixed aspect ratio (e.g., 16:9)
+            // Maintain a fixed aspect ratio (e.g., 800:600)
             float targetAspect = 800f / 600f;
             float windowAspect = (float)e.Width / e.Height;
 

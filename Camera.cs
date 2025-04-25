@@ -98,7 +98,7 @@ namespace Velocity {
         public void UseLockCam(float x, float y) {
             needReset = true;
 
-            position = new Vector3(x, y, 3.0f);
+            position = new Vector3(x, y, 6.0f);
             front = new Vector3(0.0f, 0.0f, -1.0f);
             up = new Vector3(0.0f, 1.0f, 0.0f);
             Matrix4 view = Matrix4.LookAt(position, position + front, up);

@@ -83,46 +83,86 @@ namespace Velocity {
             _posY = _posY + front.Y * _speed;
 
             model = model * Matrix4.CreateTranslation(_posX, _posY, _posZ);
-            Console.WriteLine("rotX: " + front.X);
-            Console.WriteLine("rotY: " + front.Y);
+            //Console.WriteLine("rotX: " + front.X);
+            //Console.WriteLine("rotY: " + front.Y);
             GL.UniformMatrix4(modelLocation, true, ref model);
 
             GL.DrawElements(PrimitiveType.Triangles, _indices.Length, DrawElementsType.UnsignedInt, 0);
             //GL.BindVertexArray(0);
         }
         public void Drive(KeyboardState input, FrameEventArgs even, bool isFree) {
-            float _delatTime = (float)even.Time;
+            float _deltaTime = (float)even.Time;
+            float maxSpeed = 3f * _deltaTime;
+            float revMaxSpeed = -1.5f * _deltaTime;
 
+            //if (input.IsKeyDown(Keys.W))
+            //{ 
+            //    _speed = (_speed + 0.5f) * _delatTime;
+            //    if (_speed >= maxSpeed){_speed = 3f * _delatTime;}
+            //    Console.WriteLine((_speed/_delatTime));
+            //}
+
+            //if (input.IsKeyDown(Keys.S)) {
+            //    _speed = (_speed - 0.25f) * _delatTime;
+            //    if (_speed <= revMaxSpeed){_speed = -1.5f * _delatTime;}
+            //    Console.WriteLine((_speed/_delatTime));
+            //}
+
+            //if (!input.IsKeyDown(Keys.S) && !input.IsKeyDown(Keys.W)) {
+            //    _speed = 0f;
+            //}
+
+            //if (input.IsKeyDown(Keys.A) && (input.IsKeyDown(Keys.W) || input.IsKeyDown(Keys.S)) )
+            //{
+            //    //_posX -= 1f * _delatTime;
+            //    _rotZ += 1.5f * _delatTime;
+            //}
+            // Constants
+            float acceleration = 0.001f;     // Acceleration rate
+            float deceleration = 0.00005f;     // Reverse acceleration rate
+
+            // Apply input
             if (input.IsKeyDown(Keys.W))
-            { 
-                //_posY += 1f * _delatTime;
-                _speed = 1f * _delatTime;
-            }
-
-            if (input.IsKeyDown(Keys.S))
             {
-                //_posY -= 1f * _delatTime;
-                _speed = -1f * _delatTime;
+                _speed += acceleration * _deltaTime;
+                if (_speed > maxSpeed) _speed = maxSpeed;
             }
-            if (!input.IsKeyDown(Keys.S) && !input.IsKeyDown(Keys.W)) {
-                _speed = 0f;
+            else if (input.IsKeyDown(Keys.S))
+            {
+                _speed -= deceleration * _deltaTime;
+                if (_speed < revMaxSpeed) _speed = revMaxSpeed;
             }
-
-            if (input.IsKeyDown(Keys.A))
+            else
+            {
+                // Optional: natural friction to stop when no input
+                if (_speed > 0)
+                {
+                    _speed -= acceleration * _deltaTime;
+                    if (_speed < 0) _speed = 0;
+                }
+                else if (_speed < 0)
+                {
+                    _speed += deceleration * _deltaTime;
+                    if (_speed > 0) _speed = 0;
+                }
+            }
+            if (input.IsKeyDown(Keys.A) && (input.IsKeyDown(Keys.W) || input.IsKeyDown(Keys.S)) )
             {
                 //_posX -= 1f * _delatTime;
-                _rotZ += 1f * _delatTime;
+                _rotZ += 1.5f * _deltaTime;
             }
 
-            if (input.IsKeyDown(Keys.D))
+            if (input.IsKeyDown(Keys.D) && (input.IsKeyDown(Keys.W) || input.IsKeyDown(Keys.S)) )
             {
                 //_posX += 1f * _delatTime;
-                _rotZ -= 1f * _delatTime;
+                _rotZ -= 1.5f * _deltaTime;
             }
 
             if (!isFree) {
                 _camera.UseLockCam(_posX, _posY);
             }
+
+            Console.WriteLine(_speed/_deltaTime);
         }
 
         ~Car()
