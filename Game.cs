@@ -176,11 +176,31 @@ namespace Velocity{
         }
 
         protected override void OnFramebufferResize(FramebufferResizeEventArgs e){
-            GL.Viewport(0, 0, e.Width, e.Height);
-            projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), e.Width / e.Height, 0.1f, 100.0f);
-            //int projectionLocation =  GL.GetUniformLocation(_shader.Handle, "projection");
-            //GL.UniformMatrix4(projectionLocation, true, ref projection);
-            base.OnFramebufferResize(e);
+            //GL.Viewport(0, 0, e.Width, e.Height);
+            //projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (e.Width / e.Height), 0.1f, 100.0f);
+            //base.OnFramebufferResize(e);
+            // Maintain a fixed aspect ratio (e.g., 16:9)
+            float targetAspect = 800f / 600f;
+            float windowAspect = (float)e.Width / e.Height;
+
+            int vpWidth = e.Width;
+            int vpHeight = e.Height;
+
+            if (windowAspect > targetAspect)
+            {
+                // Window is too wide, add horizontal bars
+                vpWidth = (int)(e.Height * targetAspect);
+                GL.Viewport((e.Width - vpWidth) / 2, 0, vpWidth, e.Height);
+            }
+            else
+            {
+                // Window is too tall, add vertical bars
+                vpHeight = (int)(e.Width / targetAspect);
+                GL.Viewport(0, (e.Height - vpHeight) / 2, e.Width, vpHeight);
+            }
+
+    // Keep projection unchanged
+    base.OnFramebufferResize(e);
         }
 
         protected override void OnUnload(){

@@ -6,10 +6,10 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 namespace Velocity {
     public class Car {
         private float[] vertices = {
-            0.5f,  0.5f, 0.0f,  // top right
-            0.5f, -0.5f, 0.0f,  // bottom right
-            -0.5f, -0.5f, 0.0f,  // bottom left
-            -0.5f,  0.5f, 0.0f   // top left
+            0.5f,  0.5f, 0.0f, 1.0f, 1.0f, // top right
+            0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // bottom right
+            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // bottom left
+            -0.5f,  0.5f, 0.0f, 0.0f, 1.0f  // top left
         };
 
         private uint[] _indices = {  // note that we start from 0!
@@ -24,8 +24,14 @@ namespace Velocity {
         private float _posY = 0f; 
         private float _posZ = 0f;
 
+        private float _rotZ = 0f;
+
+        private Vector2 front = new Vector2(0.0f, 0.0f);
+
         private Shader _shader;
         private Camera _camera;
+
+        private float _speed = 0f;
 
         public Car(Shader shader, Camera camera) {
             _shader = shader;
@@ -42,8 +48,17 @@ namespace Velocity {
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ElementBufferObject);
             GL.BufferData(BufferTarget.ElementArrayBuffer, _indices.Length * sizeof(uint), _indices, BufferUsageHint.StaticDraw);
+            
+            //GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), 0);
+            //GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 3 * sizeof(float));
+            var vertexLocation = GL.GetAttribLocation(_shader.Handle,"aPosition");
+            GL.EnableVertexAttribArray(vertexLocation);
+            GL.VertexAttribPointer(vertexLocation, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), 0);
 
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
+            var texCoordLocation = GL.GetAttribLocation(_shader.Handle,"aTexCoord");
+            GL.EnableVertexAttribArray(texCoordLocation);
+            GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 3 * sizeof(float));
+
 
             GL.EnableVertexAttribArray(0); 
 
@@ -54,7 +69,22 @@ namespace Velocity {
             GL.BindVertexArray(VertexArrayObject);
 
             int modelLocation = GL.GetUniformLocation(_shader.Handle, "model");
-            Matrix4 model = Matrix4.CreateTranslation(_posX, _posY, _posZ);
+            Matrix4 model = Matrix4.CreateRotationZ(_rotZ);
+            front.X = (float)Math.Sin(-1 * _rotZ);
+            front.Y = (float)Math.Cos(_rotZ);
+
+            //front = Vector2.Normalize(front);
+
+            //Console.WriteLine("posX: " + _posX);
+            //Console.WriteLine("posY: " + _posY);
+
+
+            _posX = _posX + front.X * _speed;
+            _posY = _posY + front.Y * _speed;
+
+            model = model * Matrix4.CreateTranslation(_posX, _posY, _posZ);
+            Console.WriteLine("rotX: " + front.X);
+            Console.WriteLine("rotY: " + front.Y);
             GL.UniformMatrix4(modelLocation, true, ref model);
 
             GL.DrawElements(PrimitiveType.Triangles, _indices.Length, DrawElementsType.UnsignedInt, 0);
@@ -64,23 +94,30 @@ namespace Velocity {
             float _delatTime = (float)even.Time;
 
             if (input.IsKeyDown(Keys.W))
-            {   
-                _posY += 1f * _delatTime;
+            { 
+                //_posY += 1f * _delatTime;
+                _speed = 1f * _delatTime;
             }
 
             if (input.IsKeyDown(Keys.S))
             {
-                _posY -= 1f * _delatTime;
+                //_posY -= 1f * _delatTime;
+                _speed = -1f * _delatTime;
+            }
+            if (!input.IsKeyDown(Keys.S) && !input.IsKeyDown(Keys.W)) {
+                _speed = 0f;
             }
 
             if (input.IsKeyDown(Keys.A))
             {
-                _posX -= 1f * _delatTime;
+                //_posX -= 1f * _delatTime;
+                _rotZ += 1f * _delatTime;
             }
 
             if (input.IsKeyDown(Keys.D))
             {
-                _posX += 1f * _delatTime;
+                //_posX += 1f * _delatTime;
+                _rotZ -= 1f * _delatTime;
             }
 
             if (!isFree) {
