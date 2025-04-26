@@ -92,31 +92,9 @@ namespace Velocity {
         }
         public void Drive(KeyboardState input, FrameEventArgs even, bool isFree) {
             float _deltaTime = (float)even.Time;
-            float maxSpeed = 3f * _deltaTime;
-            float revMaxSpeed = -1.5f * _deltaTime;
+            float maxSpeed = 5f * _deltaTime;
+            float revMaxSpeed = -2.5f * _deltaTime;
 
-            //if (input.IsKeyDown(Keys.W))
-            //{ 
-            //    _speed = (_speed + 0.5f) * _delatTime;
-            //    if (_speed >= maxSpeed){_speed = 3f * _delatTime;}
-            //    Console.WriteLine((_speed/_delatTime));
-            //}
-
-            //if (input.IsKeyDown(Keys.S)) {
-            //    _speed = (_speed - 0.25f) * _delatTime;
-            //    if (_speed <= revMaxSpeed){_speed = -1.5f * _delatTime;}
-            //    Console.WriteLine((_speed/_delatTime));
-            //}
-
-            //if (!input.IsKeyDown(Keys.S) && !input.IsKeyDown(Keys.W)) {
-            //    _speed = 0f;
-            //}
-
-            //if (input.IsKeyDown(Keys.A) && (input.IsKeyDown(Keys.W) || input.IsKeyDown(Keys.S)) )
-            //{
-            //    //_posX -= 1f * _delatTime;
-            //    _rotZ += 1.5f * _delatTime;
-            //}
             // Constants
             float acceleration = 0.001f;     // Acceleration rate
             float deceleration = 0.00005f;     // Reverse acceleration rate
@@ -129,7 +107,7 @@ namespace Velocity {
             }
             else if (input.IsKeyDown(Keys.S))
             {
-                _speed -= deceleration * _deltaTime;
+                _speed -= acceleration * _deltaTime;
                 if (_speed < revMaxSpeed) _speed = revMaxSpeed;
             }
             else
@@ -142,17 +120,17 @@ namespace Velocity {
                 }
                 else if (_speed < 0)
                 {
-                    _speed += deceleration * _deltaTime;
+                    _speed += acceleration * _deltaTime;
                     if (_speed > 0) _speed = 0;
                 }
             }
-            if (input.IsKeyDown(Keys.A) && (input.IsKeyDown(Keys.W) || input.IsKeyDown(Keys.S)) )
+            if (input.IsKeyDown(Keys.A) && _speed != 0)
             {
                 //_posX -= 1f * _delatTime;
                 _rotZ += 1.5f * _deltaTime;
             }
 
-            if (input.IsKeyDown(Keys.D) && (input.IsKeyDown(Keys.W) || input.IsKeyDown(Keys.S)) )
+            if (input.IsKeyDown(Keys.D) && _speed != 0)
             {
                 //_posX += 1f * _delatTime;
                 _rotZ -= 1.5f * _deltaTime;
