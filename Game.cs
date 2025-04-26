@@ -56,8 +56,10 @@ namespace Velocity{
         private int _vertexArrayObject;
 
         private Shader _shader;
+        private Shader _carShader;
         private Texture _texture;
         private Texture _texture2;
+        private Texture _texture3;
         private double _time;
         // Cube that can be moved
         private double _xPos;
@@ -91,8 +93,16 @@ namespace Velocity{
             // Enable depth test so objects in the backround don't shine trhough objects in fornt
             GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             
             // Create, compile and use the vertex and Fragmet shader
+            
+            _carShader = new Shader("shaders/car_shader.vert", "shaders/car_shader.frag");
+            _carShader.Use();
+            _texture3 = new Texture("recources/Car_01.png");
+            _carShader.SetInt("texture0", 0);
+
             _shader = new Shader("shaders/shader.vert", "shaders/shader.frag");
             _shader.Use();
             // Load textures and use them
@@ -143,6 +153,7 @@ namespace Velocity{
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             _shader.Use();
+            _shader.SetInt("useSecTex", 1);
             _texture.Use(TextureUnit.Texture0);
             _texture2.Use(TextureUnit.Texture1);
 
@@ -151,6 +162,10 @@ namespace Velocity{
             cube3.Draw();
             cube4.Draw();
             testGround.Draw();
+
+            //_carShader.Use();
+            _shader.SetInt("useSecTex", 0);
+            _texture3.Use();
             car.Draw();
 
             SwapBuffers();
