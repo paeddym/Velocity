@@ -73,6 +73,8 @@ namespace Velocity{
 
         Groundplain testGround;
 
+        List<CubeGen> cubes = new List<CubeGen>();
+
         CubeGen cube1;
         CubeGen cube2;
         CubeGen cube3;
@@ -144,46 +146,42 @@ namespace Velocity{
             int projectionLocation =  GL.GetUniformLocation(_shader.Handle, "projection");
             GL.UniformMatrix4(projectionLocation, true, ref projection);
 
-            testGround = new Groundplain(1.5f, 0.0f, 0.0f, _shader);
+            //testGround = new Groundplain(1.5f, 0.0f, 0.0f, _shader);
             //CubeGen(float posX, float posY, float posZ, int VAO,Shader shader) 
             cube1 = new CubeGen(3.0f, 4.0f, 0.0f, _vertexArrayObject, _shader);
             cube2 = new CubeGen(-3.0f, -2.0f, 0.0f, _vertexArrayObject, _shader);
             cube3 = new CubeGen(-5.0f, 0.0f, 0.0f, _vertexArrayObject, _shader);
             cube4 = new CubeGen(2.0f, -2.0f, 0.0f, _vertexArrayObject, _shader);
-
-            //Border cubes
-            cube5 = new CubeGen(1.0f, -5.0f, 0.0f, _vertexArrayObject, _shader);
-            cube6 = new CubeGen(1.0f, -4.0f, 0.0f, _vertexArrayObject, _shader);
-            cube7 = new CubeGen(1.0f, -3.0f, 0.0f, _vertexArrayObject, _shader);
-            cube8 = new CubeGen(1.0f, -2.0f, 0.0f, _vertexArrayObject, _shader);
-            cube9 = new CubeGen(1.0f, -1.0f, 0.0f, _vertexArrayObject, _shader);
-            cube10 = new CubeGen(1.0f, 0.0f, 0.0f, _vertexArrayObject, _shader);
-            cube11 = new CubeGen(1.0f, 1.0f, 0.0f, _vertexArrayObject, _shader);
-            cube12 = new CubeGen(1.0f, 2.0f, 0.0f, _vertexArrayObject, _shader);
-            cube13 = new CubeGen(1.0f, 3.0f, 0.0f, _vertexArrayObject, _shader);
-            cube14 = new CubeGen(1.0f, 4.0f, 0.0f, _vertexArrayObject, _shader);
-            cube15 = new CubeGen(1.0f, 5.0f, 0.0f, _vertexArrayObject, _shader);
-
-            List<CubeGen> cubes = new List<CubeGen>
+            
+            cubes.Add(cube1);
+            cubes.Add(cube2);
+            cubes.Add(cube3);
+            cubes.Add(cube4);
+           
+            for (int i = 0; i < 25; i++)
             {
-                cube1,
-                cube2,
-                cube3,
-                cube4,
-                //Boder cubes
-                cube5,
-                cube6,
-                cube7,
-                cube8,
-                cube9,
-                cube10,
-                cube11,
-                cube12,
-                cube13,
-                cube14,
-                cube15
-            };
-
+                float y = -12.0f + i; // Start at -12, go to +12
+                CubeGen cube = new CubeGen(13.0f, y, 0.0f, _vertexArrayObject, _shader);
+                cubes.Add(cube); // Add the cube to your list
+            }
+            for (int i = 0; i < 25; i++)
+            {
+                float y = -12.0f + i; // Start at -12, go to +12
+                CubeGen cube = new CubeGen(-13.0f, y, 0.0f, _vertexArrayObject, _shader);
+                cubes.Add(cube); // Add the cube to your list
+            }
+            for (int i = 0; i < 25; i++)
+            {
+                float x = -12.0f + i; // Start at -12, go to +12
+                CubeGen cube = new CubeGen(x, 13, 0.0f, _vertexArrayObject, _shader);
+                cubes.Add(cube); // Add the cube to your list
+            }
+            for (int i = 0; i < 25; i++)
+            {
+                float x = -12.0f + i; // Start at -12, go to +12
+                CubeGen cube = new CubeGen(x, -13, 0.0f, _vertexArrayObject, _shader);
+                cubes.Add(cube); // Add the cube to your list
+            }
             camera = new Camera(_shader);
 
             car = new Car(_shader, camera);
@@ -206,26 +204,11 @@ namespace Velocity{
             _texture.Use(TextureUnit.Texture0);
             _texture2.Use(TextureUnit.Texture1);
 
-            cube1.Draw();
-            cube2.Draw();
-            cube3.Draw();
-            cube4.Draw();
-            //Border cubes
-            cube5.Draw();
-            cube6.Draw();
-            cube7.Draw();
-            cube8.Draw();
-            cube9.Draw();
-            cube10.Draw();
-            cube11.Draw();
-            cube12.Draw();
-            cube13.Draw();
-            cube14.Draw();
-            cube15.Draw();
+           foreach (var cube in cubes) {
+               cube.Draw();
+           }
 
-            //Map cubes
-            cube5.Draw();
-            testGround.Draw();
+            //testGround.Draw();
 
             //_carShader.Use();
             _shader.SetInt("useSecTex", 0);

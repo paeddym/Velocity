@@ -154,7 +154,7 @@ namespace Velocity {
                 _camera.UseLockCam(_posX, _posY);
             }
 
-            Console.WriteLine(_speed/_deltaTime);
+            //Console.WriteLine(_speed/_deltaTime);
         }
         
         public void BounceBack()
