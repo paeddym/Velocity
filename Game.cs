@@ -78,13 +78,25 @@ namespace Velocity{
         CubeGen cube3;
         CubeGen cube4;
 
+        CubeGen cube5; 
+        CubeGen cube6;  
+        CubeGen cube7;
+        CubeGen cube8;
+        CubeGen cube9;
+        CubeGen cube10;
+        CubeGen cube11;
+        CubeGen cube12;
+        CubeGen cube13;
+        CubeGen cube14;
+        CubeGen cube15; 
+
         Camera camera;
 
         CollisionManager collisionManager;
 
         Car car;
 
-        private bool cameraFree = true;
+        private bool cameraFree = false;
 
         public Game(int width, int height, string title) : 
             base(GameWindowSettings.Default, new NativeWindowSettings() { ClientSize = (width, height), Title = title }) {}
@@ -138,12 +150,37 @@ namespace Velocity{
             cube2 = new CubeGen(-3.0f, -2.0f, 0.0f, _vertexArrayObject, _shader);
             cube3 = new CubeGen(-5.0f, 0.0f, 0.0f, _vertexArrayObject, _shader);
             cube4 = new CubeGen(2.0f, -2.0f, 0.0f, _vertexArrayObject, _shader);
+
+            //Border cubes
+            cube5 = new CubeGen(1.0f, -5.0f, 0.0f, _vertexArrayObject, _shader);
+            cube6 = new CubeGen(1.0f, -4.0f, 0.0f, _vertexArrayObject, _shader);
+            cube7 = new CubeGen(1.0f, -3.0f, 0.0f, _vertexArrayObject, _shader);
+            cube8 = new CubeGen(1.0f, -2.0f, 0.0f, _vertexArrayObject, _shader);
+            cube9 = new CubeGen(1.0f, -1.0f, 0.0f, _vertexArrayObject, _shader);
+            cube10 = new CubeGen(1.0f, 0.0f, 0.0f, _vertexArrayObject, _shader);
+            cube11 = new CubeGen(1.0f, 1.0f, 0.0f, _vertexArrayObject, _shader);
+            cube12 = new CubeGen(1.0f, 2.0f, 0.0f, _vertexArrayObject, _shader);
+            cube13 = new CubeGen(1.0f, 3.0f, 0.0f, _vertexArrayObject, _shader);
+            cube14 = new CubeGen(1.0f, 4.0f, 0.0f, _vertexArrayObject, _shader);
+            cube15 = new CubeGen(1.0f, 5.0f, 0.0f, _vertexArrayObject, _shader);
+
             List<CubeGen> cubes = new List<CubeGen>
             {
                 cube1,
                 cube2,
                 cube3,
-                cube4
+                cube4,
+                cube5,
+                cube6,
+                cube7,
+                cube8,
+                cube9,
+                cube10,
+                cube11,
+                cube12,
+                cube13,
+                cube14,
+                cube15
             };
 
             camera = new Camera(_shader);
@@ -172,6 +209,21 @@ namespace Velocity{
             cube2.Draw();
             cube3.Draw();
             cube4.Draw();
+
+            cube5.Draw();
+            cube6.Draw();
+            cube7.Draw();
+            cube8.Draw();
+            cube9.Draw();
+            cube10.Draw();
+            cube11.Draw();
+            cube12.Draw();
+            cube13.Draw();
+            cube14.Draw();
+            cube15.Draw();
+
+            //Map cubes
+            cube5.Draw();
             testGround.Draw();
 
             //_carShader.Use();
