@@ -124,16 +124,30 @@ namespace Velocity {
                     if (_speed > 0) _speed = 0;
                 }
             }
+
+            // Adjust steering based on whether the car is moving forward or backward
             if (input.IsKeyDown(Keys.A) && _speed != 0)
             {
-                //_posX -= 1f * _delatTime;
-                _rotZ += 1.5f * _deltaTime;
+                if (_speed > 0)
+                {
+                    _rotZ += 1.5f * _deltaTime;
+                }
+                else
+                {
+                    _rotZ -= 1.5f * _deltaTime;
+                }
             }
 
             if (input.IsKeyDown(Keys.D) && _speed != 0)
             {
-                //_posX += 1f * _delatTime;
-                _rotZ -= 1.5f * _deltaTime;
+                if (_speed > 0)
+                {
+                    _rotZ -= 1.5f * _deltaTime;
+                }
+                else
+                {
+                    _rotZ += 1.5f * _deltaTime;
+                }
             }
 
             if (!isFree) {
@@ -142,6 +156,23 @@ namespace Velocity {
 
             Console.WriteLine(_speed/_deltaTime);
         }
+        
+        public void BounceBack()
+        {
+            _speed = -_speed; 
+        }
+
+        public Vector3 GetPosition()
+        {
+            return new Vector3(_posX, _posY, _posZ);
+        }
+
+        // Optional: size if needed
+        public Vector2 GetSize()
+        {
+            return new Vector2(1.0f, 1.0f);
+        }
+
 
         ~Car()
         {

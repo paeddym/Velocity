@@ -80,6 +80,8 @@ namespace Velocity{
 
         Camera camera;
 
+        CollisionManager collisionManager;
+
         Car car;
 
         private bool cameraFree = true;
@@ -132,14 +134,23 @@ namespace Velocity{
 
             testGround = new Groundplain(1.5f, 0.0f, 0.0f, _shader);
             //CubeGen(float posX, float posY, float posZ, int VAO,Shader shader) 
-            cube1 = new CubeGen(1.0f, 1.0f, 1.0f, _vertexArrayObject, _shader);
-            cube2 = new CubeGen(-1.0f, -1.0f, -1.0f, _vertexArrayObject, _shader);
+            cube1 = new CubeGen(3.0f, 4.0f, 0.0f, _vertexArrayObject, _shader);
+            cube2 = new CubeGen(-3.0f, -2.0f, 0.0f, _vertexArrayObject, _shader);
             cube3 = new CubeGen(-5.0f, 0.0f, 0.0f, _vertexArrayObject, _shader);
-            cube4 = new CubeGen(0.0f, 0.0f, 0.0f, _vertexArrayObject, _shader);
-            
+            cube4 = new CubeGen(2.0f, -2.0f, 0.0f, _vertexArrayObject, _shader);
+            List<CubeGen> cubes = new List<CubeGen>
+            {
+                cube1,
+                cube2,
+                cube3,
+                cube4
+            };
+
             camera = new Camera(_shader);
 
             car = new Car(_shader, camera);
+
+            collisionManager = new CollisionManager(car, cubes);
 
             CursorState = CursorState.Grabbed;
             
@@ -178,7 +189,7 @@ namespace Velocity{
                 camera.UseFreeCam(KeyboardState, e, MouseState, IsFocused);
             }
             if (!cameraFree) {
-            car.Drive(KeyboardState, e, cameraFree);
+                car.Drive(KeyboardState, e, cameraFree);
             }
 
             if (KeyboardState.IsKeyPressed(Keys.B)) {
@@ -188,6 +199,8 @@ namespace Velocity{
             if (KeyboardState.IsKeyDown(Keys.Escape)){
                 Close();
             }
+
+            collisionManager.CheckCollisions();
         }
 
         protected override void OnFramebufferResize(FramebufferResizeEventArgs e){
