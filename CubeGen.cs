@@ -17,8 +17,18 @@ namespace Velocity {
 
            _VAO = VAO;
        }
+        public Vector3 GetPosition()
+        {
+            return new Vector3(_posX, _posY, _posZ);
+        }
 
-       public void Draw() {
+        public Vector2 GetSize()
+        {
+            return new Vector2(1.0f, 1.0f); // Assume unit size unless you scale
+        }
+
+
+        public void Draw() {
             int modelLocation = GL.GetUniformLocation(_shader.Handle, "model");
             GL.BindVertexArray(_VAO);
 

@@ -142,6 +142,23 @@ namespace Velocity {
 
             Console.WriteLine(_speed/_deltaTime);
         }
+        
+        public void BounceBack()
+        {
+            _speed = -_speed; 
+        }
+
+        public Vector3 GetPosition()
+        {
+            return new Vector3(_posX, _posY, _posZ);
+        }
+
+        // Optional: size if needed
+        public Vector2 GetSize()
+        {
+            return new Vector2(1.0f, 1.0f);
+        }
+
 
         ~Car()
         {
