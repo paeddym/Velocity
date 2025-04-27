@@ -1,6 +1,11 @@
 # Velocity
 A racing game written in C# using OpenTK
 
+# Controls
+- B: Enable driving
+- WASD: Steering
+- Esc: Leave game
+
 # TODO
 ## Compulsory
 - Create a movable object
@@ -16,6 +21,12 @@ A racing game written in C# using OpenTK
 - Items system
 - Dynamic events on racetrack
 - System to handle best times
+
+### Setup on Windows
+- Install Visual Studio 2022 and .NET 8 Framework
+- Install the necessary NuGet packages (if not done automatically)
+- Press Play Button in IDE
+- If build not possible because asset/texture is missing: Right click on texture -> Properties | Build Action: Content | Copy to Outout Directory: Copy if newer
 
 ### Setup on Arch
 - install the dotnet 8 framework from the arch arcive with 'pacman -U'
