@@ -170,6 +170,7 @@ namespace Velocity{
                 cube2,
                 cube3,
                 cube4,
+                //Boder cubes
                 cube5,
                 cube6,
                 cube7,
@@ -209,7 +210,7 @@ namespace Velocity{
             cube2.Draw();
             cube3.Draw();
             cube4.Draw();
-
+            //Border cubes
             cube5.Draw();
             cube6.Draw();
             cube7.Draw();

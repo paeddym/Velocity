@@ -22,6 +22,8 @@ namespace Velocity
             Vector3 carPos = car.GetPosition();
             Vector2 carSize = car.GetSize();
 
+            List<CubeGen> collisions = new List<CubeGen>();
+
             foreach (var cube in cubes)
             {
                 Vector3 cubePos = cube.GetPosition();
@@ -29,8 +31,14 @@ namespace Velocity
 
                 if (RectCollision(carPos, carSize, cubePos, cubeSize))
                 {
-                    HandleCollision(car, cube);
+                    collisions.Add(cube);
+                    //HandleCollision(car, cube);
                 }
+            }
+
+            if (collisions.Count > 0) {
+                Console.WriteLine("Collisions dedectet: " + collisions.Count);
+                HandleCollision(car, null);
             }
         }
 

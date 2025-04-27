@@ -159,6 +159,7 @@ namespace Velocity {
         
         public void BounceBack()
         {
+            Console.WriteLine("Car bounce back");
             _speed = -_speed; 
         }
 
