@@ -10,10 +10,15 @@ in vec2 texCoord;
 // Multiple samplers will be demonstrated in section 1.5
 uniform sampler2D texture1;
 uniform sampler2D texture2;
+uniform bool useSecTex;
 
 void main()
 {
     // To use a texture, you call the texture() function.
     // It takes two parameters: the sampler to use, and a vec2, used as texture coordinates
-    outputColor = mix(texture(texture1, texCoord), texture(texture2, texCoord), 0.2);
+    if (useSecTex) {
+        outputColor = mix(texture(texture1, texCoord), texture(texture2, texCoord), 0.2);
+    }else {
+        outputColor = texture(texture1, texCoord);
+    }
 }
