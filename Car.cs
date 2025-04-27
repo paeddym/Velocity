@@ -124,16 +124,30 @@ namespace Velocity {
                     if (_speed > 0) _speed = 0;
                 }
             }
+
+            // Adjust steering based on whether the car is moving forward or backward
             if (input.IsKeyDown(Keys.A) && _speed != 0)
             {
-                //_posX -= 1f * _delatTime;
-                _rotZ += 1.5f * _deltaTime;
+                if (_speed > 0)
+                {
+                    _rotZ += 1.5f * _deltaTime;
+                }
+                else
+                {
+                    _rotZ -= 1.5f * _deltaTime;
+                }
             }
 
             if (input.IsKeyDown(Keys.D) && _speed != 0)
             {
-                //_posX += 1f * _delatTime;
-                _rotZ -= 1.5f * _deltaTime;
+                if (_speed > 0)
+                {
+                    _rotZ -= 1.5f * _deltaTime;
+                }
+                else
+                {
+                    _rotZ += 1.5f * _deltaTime;
+                }
             }
 
             if (!isFree) {
