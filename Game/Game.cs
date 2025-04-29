@@ -116,14 +116,14 @@ namespace Velocity{
             
             _carShader = new Shader("shaders/car_shader.vert", "shaders/car_shader.frag");
             _carShader.Use();
-            _texture3 = new Texture("recources/Car_01.png");
+            _texture3 = new Texture("recources/textures/Car_01.png");
             _carShader.SetInt("texture0", 0);
 
             _shader = new Shader("shaders/shader.vert", "shaders/shader.frag");
             _shader.Use();
             // Load textures and use them
-            _texture = new Texture("textures/container.jpg");
-            _texture2 = new Texture("textures/awesomeface.png");
+            _texture = new Texture("recources/textures/container.jpg");
+            _texture2 = new Texture("recources/textures/awesomeface.png");
             _shader.SetInt("texture1", 0);
             _shader.SetInt("texture2", 1);
 

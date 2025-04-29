@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
+<PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-  </PropertyGroup>
+    </PropertyGroup>
 
   <ItemGroup>
     <None Remove="recources\Car_01.png" />
@@ -25,10 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="recources\Car_01.png">
+  <Content Include="recources/textures\Car_01.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="recources\Car_02.png">
+    <Content Include="recources/textures\Car_02.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="shaders\car_shader.frag">
@@ -40,10 +40,10 @@
     <Content Include="shaders\shader.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="textures\awesomeface.png">
+    <Content Include="recources/textures\awesomeface.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="textures\container.jpg">
+    <Content Include="recources/textures\container.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
