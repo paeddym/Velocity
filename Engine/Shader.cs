@@ -1,6 +1,6 @@
 using OpenTK.Graphics.OpenGL4;
 
-namespace Velocity {
+namespace Engine {
     public class Shader {
         public int Handle;
 

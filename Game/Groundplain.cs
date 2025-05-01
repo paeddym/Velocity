@@ -1,7 +1,8 @@
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
+using Engine;
 
-namespace Velocity {
+namespace GameApp{
     public class Groundplain {
         private float[] vertices = {
             0.5f,  0.5f, 0.0f,  // top right

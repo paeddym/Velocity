@@ -2,7 +2,7 @@ using System;
 using OpenTK.Graphics.OpenGL4;
 using StbImageSharp;
 
-namespace Velocity {
+namespace Engine {
     public class Texture {
         public readonly int Handle;
 

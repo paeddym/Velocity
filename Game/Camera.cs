@@ -2,8 +2,9 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using Engine;
 
-namespace Velocity {
+namespace GameApp{
     public class Camera {
 
         // Camera

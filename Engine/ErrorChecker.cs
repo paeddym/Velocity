@@ -1,12 +1,11 @@
 using OpenTK.Graphics.OpenGL;
 
-namespace Velocity{
+namespace Engine{
     public static class ErrorChecker
     {
         private static DebugProc _debugCallback;
         public static void CheckForGLErrors(string context)
         {
-            return;
             ErrorCode errorCode;
             while ((errorCode = GL.GetError()) != ErrorCode.NoError)
             {

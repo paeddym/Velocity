@@ -1,7 +1,8 @@
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
+using Engine;
 
-namespace Velocity {
+namespace GameApp{
     public class CubeGen {
         
         private Shader _shader;

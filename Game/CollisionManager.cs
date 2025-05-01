@@ -4,7 +4,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
-namespace Velocity
+namespace GameApp
 {
     public class CollisionManager
     {

@@ -3,9 +3,9 @@ using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Mathematics;
+using Engine;
 
-
-namespace Velocity{
+namespace GameApp{
     public class Game : GameWindow {
 
         float[] _vertices = {
