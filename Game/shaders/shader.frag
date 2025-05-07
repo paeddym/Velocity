@@ -16,9 +16,5 @@ void main()
 {
     // To use a texture, you call the texture() function.
     // It takes two parameters: the sampler to use, and a vec2, used as texture coordinates
-    if (useSecTex) {
-        outputColor = mix(texture(texture1, texCoord), texture(texture2, texCoord), 0.2);
-    }else {
-        outputColor = texture(texture1, texCoord);
-    }
+    outputColor = texture(texture1, texCoord);
 }

@@ -20,9 +20,7 @@ void main(void)
 {
     // Then, we further the input texture coordinate to the output one.
     // texCoord can now be used in the fragment shader.
-    
     texCoord = vec2(aTexCoord.x, aTexCoord.y);
 
-    //gl_Position = vec4(aPosition, 1.0) * transform;
     gl_Position = vec4(aPosition, 1.0) * model * view * projection;
 }

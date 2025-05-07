@@ -56,9 +56,7 @@ namespace GameApp{
         private int _vertexArrayObject;
 
         private Shader _shader;
-        private Shader _carShader;
         private Texture _texture;
-        private Texture _texture2;
         private Texture _texture3;
         private double _time;
         // Cube that can be moved
@@ -114,18 +112,13 @@ namespace GameApp{
             
             // Create, compile and use the vertex and Fragmet shader
             
-            _carShader = new Shader("shaders/car_shader.vert", "shaders/car_shader.frag");
-            _carShader.Use();
             _texture3 = new Texture("recources/textures/Car_01.png");
-            _carShader.SetInt("texture0", 0);
 
             _shader = new Shader("shaders/shader.vert", "shaders/shader.frag");
             _shader.Use();
             // Load textures and use them
             _texture = new Texture("recources/textures/container.jpg");
-            _texture2 = new Texture("recources/textures/awesomeface.png");
             _shader.SetInt("texture1", 0);
-            _shader.SetInt("texture2", 1);
 
             _vertexArrayObject = GL.GenVertexArray();
             GL.BindVertexArray(_vertexArrayObject);
@@ -202,7 +195,6 @@ namespace GameApp{
             _shader.Use();
             _shader.SetInt("useSecTex", 1);
             _texture.Use(TextureUnit.Texture0);
-            _texture2.Use(TextureUnit.Texture1);
 
            foreach (var cube in cubes) {
                cube.Draw();
