@@ -9,16 +9,12 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace Engine {
     public class GameObject {
-        String _objectName;
-        Shader _shader;
-        Texture _texture;
+        public String objectName;
+        // Strucure posX, posY, rotZ
+        public Vector3 objectPos = new Vector3(.0f, .0f, .0f);
 
-        private float _posX = 0f;
-        private float _posY = 0f; 
-        private float _posZ = 0f;
-
-        private float _rotZ = 0f;
-
+        private Shader _shader;
+        private Texture _texture;
         private Vector2 front = new Vector2(0.0f, 0.0f);
 
         private int VertexBufferObject = 0;
@@ -26,14 +22,14 @@ namespace Engine {
         private int ElementBufferObject = 0;
 
         public GameObject(String objectName, Shader shader, Texture texture) {
-            this._objectName = objectName;
+            this.objectName = objectName;
             this._shader = shader;
             this._texture = texture;
         }
         public GameObject(String objectName, Shader shader, Texture texture, int vbo,
                 int vao, int ebo) {
 
-            this._objectName = objectName;
+            this.objectName = objectName;
             this._shader = shader;
             this._texture = texture;
             this.VertexArrayObject = vao;
@@ -41,14 +37,12 @@ namespace Engine {
             this.ElementBufferObject = ebo;
         }
 
-        public void UpdatePosition(float posX, float posY, float posZ, float rotZ) {
-            this._posX = posX;
-            this._posY = posY;
-            this._posZ = posZ;
-            this._rotZ = rotZ;
+        public void Draw() {
+            //Implement Draw() Function
         }
 
         ~GameObject(){
+            //TODO: Implement cleanup logic for OpenGL resoruces
         }
     }
 }
