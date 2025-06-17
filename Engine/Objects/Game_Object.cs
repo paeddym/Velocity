@@ -17,9 +17,9 @@ namespace Engine {
         private Texture _texture;
         private Vector2 front = new Vector2(0.0f, 0.0f);
 
-        private int VertexBufferObject = 0;
-        private int VertexArrayObject = 0;
-        private int ElementBufferObject = 0;
+        private int VertexBufferObject = -1;
+        private int VertexArrayObject = -1;
+        private int ElementBufferObject = -1;
 
         public GameObject(String objectName, Shader shader, Texture texture) {
             this.objectName = objectName;
@@ -32,9 +32,10 @@ namespace Engine {
             this.objectName = objectName;
             this._shader = shader;
             this._texture = texture;
+            this.VertexBufferObject = vbo;
             this.VertexArrayObject = vao;
-            this.VertexBufferObject = vao;
             this.ElementBufferObject = ebo;
+
         }
 
         public void Draw() {
@@ -43,6 +44,17 @@ namespace Engine {
 
         ~GameObject(){
             //TODO: Implement cleanup logic for OpenGL resoruces
+            if(this.VertexBufferObject != -1) {
+                GL.DeleteVertexArray(this.VertexArrayObject);
+            }
+
+            if(this.VertexBufferObject != -1) {
+                GL.DeleteBuffer(this.VertexBufferObject);
+            }
+
+            if(this.VertexBufferObject != -1) {
+                GL.DeleteBuffer(this.ElementBufferObject);
+            }
         }
     }
 }
