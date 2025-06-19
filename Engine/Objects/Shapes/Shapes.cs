@@ -35,5 +35,8 @@ namespace Engine {
         public static void BindQuad() {
             GL.BindVertexArray(VertexArrayObject);
         }
+        public static int GetQuadIndices() {
+            return _indices.Length;
+        }
     }
  }

@@ -10,7 +10,7 @@ namespace Engine {
         List<GameObject> _gameObjects = new List<GameObject>();
 
         public ObjectManager() {
-
+            Shapes.Initialize();
         }
 
         public void AddGameObject(GameObject gameObject) {
@@ -18,19 +18,11 @@ namespace Engine {
         }
 
         public void DeleteGameObject(String gameObjectName) {
-            foreach (GameObject gameObject in _gameObjects) {
-                if (gameObject.objectName == gameObjectName) {
-                    _gameObjects.Remove(gameObject); 
-                }
-            }
-
+            _gameObjects.RemoveAll(obj => obj.objectName == gameObjectName);
         }
 
         public GameObject? GetGameObject(String gameObjectName) {
-            foreach (GameObject gameObject in _gameObjects) {
-                return gameObject;
-            }
-            return null;
+            return _gameObjects.FirstOrDefault(obj => obj.objectName == gameObjectName);
         }
     }
 }
