@@ -1,34 +1,36 @@
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
-using OpenTK.Windowing.Common;
-using OpenTK.Windowing.GraphicsLibraryFramework;
-
-// The idee is that an object contains all the information needed to draw an object.
-// The ObjectManger then will use this information to set everything up so that the object can
-// be drawn.
 
 namespace Engine {
+    // The GameObject class contains all the information about a object this is:
+    // Texture, Shader, 2D Position, rotation;
+    // What maby needs to be added in the future is the Scaling if needed
     public class GameObject {
         public String objectName;
-        // Strucure posX, posY, rotZ
-        public Vector3 objectPos = new Vector3(.0f, .0f, .0f);
+        // Strucure posX, posY, posZ, rotZ
+        public Vector4 objectPos = new Vector4(.0f, .0f, .0f, .0f);
+        public Vector2 front = new Vector2(.0f, .0f);
 
         private Shader _shader;
         private Texture _texture;
-        private Vector2 front = new Vector2(.0f, .0f);
 
         private int VertexBufferObject = -1;
         private int VertexArrayObject = -1;
         private int ElementBufferObject = -1;
 
-        public GameObject(string objectName, string shader, string texture) 
-            : this(objectName, 
+        public GameObject(string objectName, string textureName) 
+            : this(objectName, "default", textureName) {} 
+
+        public GameObject(string objectName, string shaderName, string textureName) 
+            : this(objectName, ResourceManager.GetShader(shaderName),
+                    ResourceManager.GetTexture(textureName)) {}
 
         public GameObject(string objectName, Shader shader, Texture texture) {
             this.objectName = objectName;
             this._shader = shader;
             this._texture = texture;
         }
+
         public GameObject(string objectName, Shader shader, Texture texture, int vbo,
                 int vao, int ebo) {
 
@@ -45,9 +47,9 @@ namespace Engine {
             this._texture.Use();
             
             int modelLocation = GL.GetUniformLocation(_shader.Handle, "model");
-            Matrix4 model = Matrix4.CreateRotationZ(objectPos.Z);
+            Matrix4 model = Matrix4.CreateRotationZ(objectPos.W);
 
-            model = model * Matrix4.CreateTranslation(objectPos.X, objectPos.Y, 0.0f);
+            model = model * Matrix4.CreateTranslation(objectPos.X, objectPos.Y, objectPos.Z);
             GL.UniformMatrix4(modelLocation, true, ref model);
 
             if(VertexBufferObject == -1) {

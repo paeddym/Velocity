@@ -1,11 +1,12 @@
-// TODO: Make this Class static an contain default shapes, like Quad, Rectangle, Circle 
 using OpenTK.Graphics.OpenGL4;
 
 namespace Engine {
+    // The Shapes class is used to create default Shapes which are needed by the game
+    // so they do not need to be recreated each time a new object is created
+    // (This is probaply not needed whith this size of game we do but what ever)
     public static class Shapes{
         // These are the default VBOs, VAOs, EBOs as we only
         // use Quads so we do not need to create to much
-        // maby this is a good idee maby not.
         private static float[] vertices = {
             0.5f,  0.5f, 0.0f, 1.0f, 1.0f, // top right
             0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // bottom right

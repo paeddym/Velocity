@@ -2,9 +2,8 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using Engine;
 
-namespace GameApp{
+namespace Engine {
     public class Camera {
 
         // Camera
@@ -21,7 +20,7 @@ namespace GameApp{
         private Shader _shader;
 
         private bool needReset = false;
-        
+
         public Camera(Shader shader) {
             // Initial camera Setup 
             _shader = shader;
@@ -43,38 +42,31 @@ namespace GameApp{
                 needReset = false;
             }
 
-            if (!windoFocus || input.IsKeyDown(Keys.RightShift)) // check to see if the window is focused and right shift is pressed
-            {
+            if (!windoFocus || input.IsKeyDown(Keys.RightShift)) {// check to see if the window is focused and right shift is pressed
                 return;
             }
 
-            if (input.IsKeyDown(Keys.W))
-            {
+            if (input.IsKeyDown(Keys.W)){
                 position += front * speed * (float)_delatTime; //Forward 
             }
 
-            if (input.IsKeyDown(Keys.S))
-            {
+            if (input.IsKeyDown(Keys.S)){
                 position -= front * speed * (float)_delatTime; //Backwards
             }
 
-            if (input.IsKeyDown(Keys.A))
-            {
+            if (input.IsKeyDown(Keys.A)){
                 position -= Vector3.Normalize(Vector3.Cross(front, up)) * speed * (float)_delatTime; //Left
             }
 
-            if (input.IsKeyDown(Keys.D))
-            {
+            if (input.IsKeyDown(Keys.D)){
                 position += Vector3.Normalize(Vector3.Cross(front, up)) * speed * (float)_delatTime; //Right
             }
 
-            if (input.IsKeyDown(Keys.Space))
-            {
+            if (input.IsKeyDown(Keys.Space)){
                 position += up * speed * (float)_delatTime; //Up 
             }
 
-            if (input.IsKeyDown(Keys.LeftShift))
-            {
+            if (input.IsKeyDown(Keys.LeftShift)){
                 position -= up * speed * (float)_delatTime; //Down
             }
 
