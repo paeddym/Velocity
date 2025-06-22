@@ -10,6 +10,7 @@ namespace Engine {
         // added to the Dict, so it should be more easy to reuse them in the future
         public static Shader LoadShader(string name, string vertPath, string fragPath) {
             if (!_shaders.ContainsKey(name)) {
+                Console.WriteLine("Building Shader: " + name);
                 _shaders[name] = new Shader(vertPath, fragPath);
             }
             return _shaders[name];

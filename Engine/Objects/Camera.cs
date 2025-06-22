@@ -5,7 +5,7 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace Engine {
     public class Camera {
-
+// WARNING: The Camera currently works only with the default shader
         // Camera
         Vector3 position;
         Vector3 cameraTarget;
@@ -21,59 +21,70 @@ namespace Engine {
 
         private bool needReset = false;
 
+        public Camera()
+            : this(ResourceManager.GetShader("default")) {}
+
         public Camera(Shader shader) {
             // Initial camera Setup 
-            _shader = shader;
-            position = new Vector3(0.0f, 0.0f, 3.0f);
+            this._shader = shader;
+            _shader.Use();
+            position = new Vector3(0.0f, 0.0f, 6.0f);
             front = new Vector3(0.0f, 0.0f, -1.0f);
             up = new Vector3(0.0f, 1.0f, 0.0f);
             Matrix4 view = Matrix4.LookAt(position, position + front, up);
+            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+
+            int projectionLocation =  GL.GetUniformLocation(_shader.Handle, "projection");
+            GL.UniformMatrix4(projectionLocation, false, ref projection);
             int viewLocation = GL.GetUniformLocation(_shader.Handle, "view");
-            GL.UniformMatrix4(viewLocation, true, ref view);
+            GL.UniformMatrix4(viewLocation, false, ref view);
         }
 
-        public void UseFreeCam(KeyboardState input, FrameEventArgs even, MouseState mouse, bool windoFocus){
+        public void UseFreeCam(){
             float speed = 1.5f;
-            float _delatTime = (float)even.Time; 
+            FrameEventArgs _event = InputProvider.GetFrameEvent();
+            float _delatTime = (float)_event.Time;
+            MouseState _mouseState = InputProvider.GetMouseState();
+            KeyboardState _keyboardState = InputProvider.GetKeyboardState();
 
             if (needReset) {
-                lastPos = new Vector2(mouse.X, mouse.Y);
+                lastPos = new Vector2(_mouseState.X, _mouseState.Y);
                 resetCam();
                 needReset = false;
             }
 
-            if (!windoFocus || input.IsKeyDown(Keys.RightShift)) {// check to see if the window is focused and right shift is pressed
+            if (!InputProvider.GetWindowFocus() || _keyboardState.IsKeyDown(Keys.RightShift)) {// check to see if the window is focused and right shift is pressed
                 return;
             }
 
-            if (input.IsKeyDown(Keys.W)){
+            if (_keyboardState.IsKeyDown(Keys.W)){
                 position += front * speed * (float)_delatTime; //Forward 
             }
 
-            if (input.IsKeyDown(Keys.S)){
+            if (_keyboardState.IsKeyDown(Keys.S)){
                 position -= front * speed * (float)_delatTime; //Backwards
             }
 
-            if (input.IsKeyDown(Keys.A)){
+            if (_keyboardState.IsKeyDown(Keys.A)){
                 position -= Vector3.Normalize(Vector3.Cross(front, up)) * speed * (float)_delatTime; //Left
             }
 
-            if (input.IsKeyDown(Keys.D)){
+            if (_keyboardState.IsKeyDown(Keys.D)){
                 position += Vector3.Normalize(Vector3.Cross(front, up)) * speed * (float)_delatTime; //Right
             }
 
-            if (input.IsKeyDown(Keys.Space)){
+            if (_keyboardState.IsKeyDown(Keys.Space)){
                 position += up * speed * (float)_delatTime; //Up 
             }
 
-            if (input.IsKeyDown(Keys.LeftShift)){
+            if (_keyboardState.IsKeyDown(Keys.LeftShift)){
                 position -= up * speed * (float)_delatTime; //Down
             }
 
             // Mouse input
-            float deltaX = mouse.X - lastPos.X;
-            float deltaY = mouse.Y - lastPos.Y;
-            lastPos = new Vector2(mouse.X, mouse.Y);
+            float deltaX = _mouseState.X - lastPos.X;
+            float deltaY = _mouseState.Y - lastPos.Y;
+            lastPos = new Vector2(_mouseState.X, _mouseState.Y);
 
             yaw += deltaX * 0.05f;
             pitch -= deltaY * 0.05f;
@@ -85,7 +96,7 @@ namespace Engine {
 
             Matrix4 view = Matrix4.LookAt(position, position + front, up);
             int viewLocation = GL.GetUniformLocation(_shader.Handle, "view");
-            GL.UniformMatrix4(viewLocation, true, ref view);
+            GL.UniformMatrix4(viewLocation, false, ref view);
         }
 
         public void UseLockCam(float x, float y) {
@@ -96,7 +107,7 @@ namespace Engine {
             up = new Vector3(0.0f, 1.0f, 0.0f);
             Matrix4 view = Matrix4.LookAt(position, position + front, up);
             int viewLocation = GL.GetUniformLocation(_shader.Handle, "view");
-            GL.UniformMatrix4(viewLocation, true, ref view);
+            GL.UniformMatrix4(viewLocation, false, ref view);
         }
 
         private void resetCam() {
@@ -106,7 +117,7 @@ namespace Engine {
             up = new Vector3(0.0f, 1.0f, 0.0f);
             Matrix4 view = Matrix4.LookAt(position, position + front, up);
             int viewLocation = GL.GetUniformLocation(_shader.Handle, "view");
-            GL.UniformMatrix4(viewLocation, true, ref view);
+            GL.UniformMatrix4(viewLocation, false, ref view);
         }
 
         ~Camera()

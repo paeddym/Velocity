@@ -18,6 +18,9 @@ namespace Engine {
         private int VertexArrayObject = -1;
         private int ElementBufferObject = -1;
 
+        public GameObject(string objectName)
+            : this(objectName, "default", "default") {}
+
         public GameObject(string objectName, string textureName) 
             : this(objectName, "default", textureName) {} 
 
@@ -45,18 +48,19 @@ namespace Engine {
         public void Draw() {
             this._shader.Use();
             this._texture.Use();
-            
-            int modelLocation = GL.GetUniformLocation(_shader.Handle, "model");
-            Matrix4 model = Matrix4.CreateRotationZ(objectPos.W);
-
-            model = model * Matrix4.CreateTranslation(objectPos.X, objectPos.Y, objectPos.Z);
-            GL.UniformMatrix4(modelLocation, true, ref model);
 
             if(VertexBufferObject == -1) {
                 Shapes.BindQuad();
             } else {
                 // ToDo: Implement the things that need to happen, when custom Shapes are used
             }
+
+            int modelLocation = GL.GetUniformLocation(_shader.Handle, "model");
+            Matrix4 model = Matrix4.CreateRotationZ(objectPos.W);
+
+            model = model * Matrix4.CreateTranslation(objectPos.X, objectPos.Y, objectPos.Z);
+
+            GL.UniformMatrix4(modelLocation, false, ref model);
 
             GL.DrawElements(PrimitiveType.Triangles, Shapes.GetQuadIndices(), DrawElementsType.UnsignedInt, 0);
         }

@@ -7,7 +7,7 @@
 
 namespace Engine {
     public static class ObjectManager {
-       private static List<GameObject> _gameObjects = new List<GameObject>();
+        private static List<GameObject> _gameObjects = new List<GameObject>();
 
         public static void AddGameObject(GameObject gameObject) {
             _gameObjects.Add(gameObject);
@@ -21,6 +21,11 @@ namespace Engine {
             _gameObjects.RemoveAll(obj => obj.objectName == gameObjectName);
         }
 
+        public static void DrawAll() {
+            foreach (var gameObject in _gameObjects) {
+                gameObject.Draw();
+            }
+        }
     }
 }
 

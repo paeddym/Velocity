@@ -25,10 +25,10 @@
     <Content Include="recources/textures\Car_02.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="shaders\shader.frag">
+    <Content Include="shaders\default.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="shaders\shader.vert">
+    <Content Include="shaders\default.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="recources/textures\awesomeface.png">
