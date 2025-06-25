@@ -47,6 +47,7 @@ namespace Engine {
 
         public void Draw() {
             this._shader.Use();
+            Console.WriteLine($"GameObject Shader handle: {_shader.Handle}");
             this._texture.Use();
 
             if(VertexBufferObject == -1) {

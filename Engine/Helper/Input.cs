@@ -26,6 +26,7 @@ namespace Engine{
        }
 
        public static MouseState ?GetMouseState() {
+           Console.WriteLine(_mouseState);
            return _mouseState;
        }
 

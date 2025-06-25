@@ -9,6 +9,7 @@ namespace GameApp{
 
         Camera _camera; 
         Car _car;
+        UIObject _UI;
 
         public Game(int width, int height, string title) : 
             base(GameWindowSettings.Default, new NativeWindowSettings() { ClientSize = (width, height), Title = title }) {}
@@ -21,23 +22,25 @@ namespace GameApp{
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-            CursorState = CursorState.Grabbed;
+            //CursorState = CursorState.Grabbed;
             // Initialize the EngineCore aka default shader and texture
             // All other game initalisations need to be done after the Engine Init
-            EngineCore.Initialize("shaders/default.vert", "shaders/default.frag", 
-                    "recources/textures/container.jpg", true);
+            //EngineCore.Initialize("shaders/default.vert", "shaders/default.frag", 
+            //        "recources/textures/container.jpg", true);
             Shapes.Initialize();
 
-            ResourceManager.LoadTexture("car", "recources/textures/Car_01.png");
+            //ResourceManager.LoadTexture("car", "recources/textures/Car_01.png");
 
-            GameObject test1 = new GameObject("test");
-            ObjectManager.AddGameObject(test1);
+            //GameObject test1 = new GameObject("test");
+            //ObjectManager.AddGameObject(test1);
 
-            GameObject test = new GameObject("car", "car");
-            ObjectManager.AddGameObject(test);
+            //GameObject test = new GameObject("car", "car");
+            //ObjectManager.AddGameObject(test);
 
-            _camera = new Camera();
-            _car = new Car("car", _camera);
+            //_camera = new Camera();
+            //_car = new Car("car", _camera);
+
+            _UI = new UIObject();
 
             base.OnLoad();
         }
@@ -45,15 +48,16 @@ namespace GameApp{
         protected override void OnRenderFrame(FrameEventArgs e){
             base.OnRenderFrame(e);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            ObjectManager.DrawAll();
+            //ObjectManager.DrawAll();
+            _UI.Draw();
             SwapBuffers();
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e){
             base.OnUpdateFrame(e);
-            
-            InputProvider.UpdateInputStates(KeyboardState, e, MouseState, IsFocused);
-            _car.Drive();
+
+            //InputProvider.UpdateInputStates(KeyboardState, e, MouseState, IsFocused);
+            //_car.Drive();
 
             if (KeyboardState.IsKeyDown(Keys.Escape)){
                 Close();
