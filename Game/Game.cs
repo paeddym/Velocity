@@ -9,7 +9,6 @@ namespace GameApp{
 
         Camera _camera; 
         Car _car;
-        UIObject _UI;
 
         public Game(int width, int height, string title) : 
             base(GameWindowSettings.Default, new NativeWindowSettings() { ClientSize = (width, height), Title = title }) {}
@@ -40,8 +39,6 @@ namespace GameApp{
             //_camera = new Camera();
             //_car = new Car("car", _camera);
 
-            _UI = new UIObject();
-
             base.OnLoad();
         }
 
@@ -49,7 +46,6 @@ namespace GameApp{
             base.OnRenderFrame(e);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             //ObjectManager.DrawAll();
-            _UI.Draw();
             SwapBuffers();
         }
 
@@ -97,3 +93,4 @@ namespace GameApp{
 
     }
 }
+
