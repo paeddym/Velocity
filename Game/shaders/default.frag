@@ -9,8 +9,6 @@ in vec2 texCoord;
 // By default, the unit is 0, so no code-related setup is actually needed.
 // Multiple samplers will be demonstrated in section 1.5
 uniform sampler2D texture1;
-uniform sampler2D texture2;
-uniform bool useSecTex;
 
 void main()
 {

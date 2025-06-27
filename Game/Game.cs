@@ -2,6 +2,7 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using OpenTK.Mathematics;
 using Engine;
 
 namespace GameApp{
@@ -24,20 +25,25 @@ namespace GameApp{
             //CursorState = CursorState.Grabbed;
             // Initialize the EngineCore aka default shader and texture
             // All other game initalisations need to be done after the Engine Init
-            //EngineCore.Initialize("shaders/default.vert", "shaders/default.frag", 
-            //        "recources/textures/container.jpg", true);
+            EngineCore.Initialize("shaders/default.vert", "shaders/default.frag", 
+                    "recources/textures/container.jpg", true);
+
+            ResourceManager.LoadShader("text", "shaders/textUI.vert", "shaders/textUI.frag");
+            TextRenderer.Initialize();
+            TextRenderer.GenerateFont("default", "recources/Fonts/04B_30__.TTF");
+
             Shapes.Initialize();
 
-            //ResourceManager.LoadTexture("car", "recources/textures/Car_01.png");
+            ResourceManager.LoadTexture("car", "recources/textures/Car_01.png");
 
-            //GameObject test1 = new GameObject("test");
-            //ObjectManager.AddGameObject(test1);
+            GameObject test1 = new GameObject("test");
+            ObjectManager.AddGameObject(test1);
 
-            //GameObject test = new GameObject("car", "car");
-            //ObjectManager.AddGameObject(test);
+            GameObject test = new GameObject("car", "car");
+            ObjectManager.AddGameObject(test);
 
-            //_camera = new Camera();
-            //_car = new Car("car", _camera);
+            _camera = new Camera();
+            _car = new Car("car", _camera);
 
             base.OnLoad();
         }
@@ -45,15 +51,20 @@ namespace GameApp{
         protected override void OnRenderFrame(FrameEventArgs e){
             base.OnRenderFrame(e);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            //ObjectManager.DrawAll();
+            ObjectManager.DrawAll();
+            //RenderText(string shader, string text, float x, float y, float scale, Vector3 color)
+            Vector3 color = new Vector3(0.5f, 0.8f, 0.2f);
+            TextRenderer.RenderText("text", "This is a test Text xD", 25f, 25f, 1f, color);
+            TextRenderer.RenderText("text", "This is a test Text xD", 25f, 500f, 1f, color);
+
             SwapBuffers();
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e){
             base.OnUpdateFrame(e);
 
-            //InputProvider.UpdateInputStates(KeyboardState, e, MouseState, IsFocused);
-            //_car.Drive();
+            InputProvider.UpdateInputStates(KeyboardState, e, MouseState, IsFocused);
+            _car.Drive();
 
             if (KeyboardState.IsKeyDown(Keys.Escape)){
                 Close();

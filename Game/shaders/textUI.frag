@@ -1,19 +1,12 @@
-#version 330
+#version 330 core
+in vec2 TexCoords;
+out vec4 color;
 
-out vec4 outputColor;
-
-in vec2 texCoord;
-
-// A sampler2d is the representation of a texture in a shader.
-// Each sampler is bound to a texture unit (texture units are described in Texture.cs on the Use function)
-// By default, the unit is 0, so no code-related setup is actually needed.
-// Multiple samplers will be demonstrated in section 1.5
-uniform sampler2D texture1;
+uniform sampler2D text;
+uniform vec3 textColor;
 
 void main()
-{
-    // To use a texture, you call the texture() function.
-    // It takes two parameters: the sampler to use, and a vec2, used as texture coordinates
-    outputColor = texture(texture1, texCoord);
-
-}
+{    
+    vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);
+    color = vec4(textColor, 1.0) * sampled;
+}  
