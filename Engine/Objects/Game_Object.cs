@@ -10,7 +10,7 @@ namespace Engine {
         // Strucure posX, posY, posZ, rotZ
         public Vector4 objectPos = new Vector4(.0f, .0f, .0f, .0f);
         public Vector2 front = new Vector2(.0f, .0f);
-        public int scale;
+        public float scale = 1f;
         private Vector3 scaleVector = new Vector3(1f, 1f, 1f);
 
         private Shader _shader;

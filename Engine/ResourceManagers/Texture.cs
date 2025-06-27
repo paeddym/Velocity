@@ -1,11 +1,9 @@
-using System;
 using OpenTK.Graphics.OpenGL4;
 using StbImageSharp;
 
 namespace Engine {
     public class Texture {
         public readonly int Handle;
-
         public readonly ImageResult image;
 
         public Texture(string path){

@@ -35,17 +35,17 @@ namespace GameApp{
 
             ResourceManager.LoadTexture("car", "recources/cars/Car_01.png");
             ResourceManager.LoadTexture("map3", "recources/tracks/Track_03.png");
-
             MapBuilder.Initialize(maps);
+
 
             //GameObject test1 = new GameObject("test");
             //ObjectManager.AddGameObject(test1);
             GameObject Map = new GameObject("map3", "map3");
-            Map.scale.X = 40f;
-            Map.scale.Y = 40f;
+            Map.scale = 40f;
             ObjectManager.AddGameObject(Map);
 
             GameObject test = new GameObject("car", "car");
+            test.scale = 1f;
             ObjectManager.AddGameObject(test);
 
             

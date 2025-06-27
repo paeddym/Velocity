@@ -90,6 +90,17 @@ namespace GameApp{
 
             _camera.UseLockCam(car.objectPos.X, car.objectPos.Y, car.objectPos.W);
 
+            float[] collision = {0f, 0f, 0f};
+
+            collision = MapBuilder.CheckCollision("map3", car.objectPos.X, car.objectPos.Y);
+            if (collision[2] != -1){
+                Console.WriteLine($"Alpha under car: X:{collision[0]} Y:{collision[1]} A:{collision[2]}");
+            }else {
+                Console.WriteLine($"No collision Car probaply out of Map");
+                Console.WriteLine($"Car Pos: X: {car.objectPos.X} Y: {car.objectPos.Y}" + 
+                        $"coll array: {collision[0]},{collision[1]},{collision[2]}");
+            }
+
         }
 
         public void BounceBack()
