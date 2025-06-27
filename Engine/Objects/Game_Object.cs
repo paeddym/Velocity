@@ -10,6 +10,8 @@ namespace Engine {
         // Strucure posX, posY, posZ, rotZ
         public Vector4 objectPos = new Vector4(.0f, .0f, .0f, .0f);
         public Vector2 front = new Vector2(.0f, .0f);
+        public int scale;
+        private Vector3 scaleVector = new Vector3(1f, 1f, 1f);
 
         private Shader _shader;
         private Texture _texture;
@@ -48,6 +50,8 @@ namespace Engine {
         public void Draw() {
             this._shader.Use();
             this._texture.Use();
+            scaleVector.X = scale;
+            scaleVector.Y = scale;
 
             if(VertexBufferObject == -1) {
                 Shapes.BindQuad();
@@ -56,10 +60,10 @@ namespace Engine {
             }
 
             int modelLocation = GL.GetUniformLocation(_shader.Handle, "model");
-            Matrix4 model = Matrix4.CreateRotationZ(objectPos.W);
-
-            model = model * Matrix4.CreateTranslation(objectPos.X, objectPos.Y, objectPos.Z);
-
+            Matrix4 model = Matrix4.CreateScale(scaleVector) * 
+                            Matrix4.CreateRotationZ(objectPos.W) *
+                            Matrix4.CreateTranslation(objectPos.X, objectPos.Y, objectPos.Z);
+                            
             GL.UniformMatrix4(modelLocation, false, ref model);
 
             GL.DrawElements(PrimitiveType.Triangles, Shapes.GetQuadIndices(), DrawElementsType.UnsignedInt, 0);

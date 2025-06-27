@@ -88,7 +88,7 @@ namespace GameApp{
             car.objectPos.X = car.objectPos.X + car.front.X * _speed;
             car.objectPos.Y = car.objectPos.Y + car.front.Y * _speed;
 
-            _camera.UseLockCam(car.objectPos.X, car.objectPos.Y);
+            _camera.UseLockCam(car.objectPos.X, car.objectPos.Y, car.objectPos.W);
 
         }
 

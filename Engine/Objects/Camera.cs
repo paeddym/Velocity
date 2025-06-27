@@ -99,16 +99,22 @@ namespace Engine {
             GL.UniformMatrix4(viewLocation, false, ref view);
         }
 
-        public void UseLockCam(float x, float y) {
+        public void UseLockCam(float x, float y, float rotZ) {
             needReset = true;
+            _shader.Use();
 
             position = new Vector3(x, y, 6.0f);
-            front = new Vector3(0.0f, 0.0f, -1.0f);
-            up = new Vector3(0.0f, 1.0f, 0.0f);
+
+            Matrix4 rotationZ = Matrix4.CreateRotationZ(rotZ);
+
+            front = Vector3.TransformVector(new Vector3(0.0f, 0.0f, -1.0f), rotationZ);
+            up    = Vector3.TransformVector(new Vector3(0.0f, 1.0f,  0.0f), rotationZ);
+
             Matrix4 view = Matrix4.LookAt(position, position + front, up);
             int viewLocation = GL.GetUniformLocation(_shader.Handle, "view");
             GL.UniformMatrix4(viewLocation, false, ref view);
         }
+
 
         private void resetCam() {
             yaw = -90;

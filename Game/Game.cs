@@ -11,17 +11,17 @@ namespace GameApp{
         Camera _camera; 
         Car _car;
 
+        string[] maps = {"map3"};
+
         public Game(int width, int height, string title) : 
             base(GameWindowSettings.Default, new NativeWindowSettings() { ClientSize = (width, height), Title = title }) {}
         protected override void OnLoad(){
 
-            // Clear buffer color
-            // Enable depth test so objects in the backround don't shine trhough objects in fornt
             GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-
+            // Maby add back later
             //CursorState = CursorState.Grabbed;
             // Initialize the EngineCore aka default shader and texture
             // All other game initalisations need to be done after the Engine Init
@@ -30,18 +30,26 @@ namespace GameApp{
 
             ResourceManager.LoadShader("text", "shaders/textUI.vert", "shaders/textUI.frag");
             TextRenderer.Initialize();
-            TextRenderer.GenerateFont("default", "recources/Fonts/04B_30__.TTF");
-
+            TextRenderer.GenerateFont("default", "recources/fonts/04B_30__.TTF");
             Shapes.Initialize();
 
-            ResourceManager.LoadTexture("car", "recources/textures/Car_01.png");
+            ResourceManager.LoadTexture("car", "recources/cars/Car_01.png");
+            ResourceManager.LoadTexture("map3", "recources/tracks/Track_03.png");
 
-            GameObject test1 = new GameObject("test");
-            ObjectManager.AddGameObject(test1);
+            MapBuilder.Initialize(maps);
+
+            //GameObject test1 = new GameObject("test");
+            //ObjectManager.AddGameObject(test1);
+            GameObject Map = new GameObject("map3", "map3");
+            Map.scale.X = 40f;
+            Map.scale.Y = 40f;
+            ObjectManager.AddGameObject(Map);
 
             GameObject test = new GameObject("car", "car");
             ObjectManager.AddGameObject(test);
 
+            
+            
             _camera = new Camera();
             _car = new Car("car", _camera);
 
