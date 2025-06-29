@@ -3,16 +3,16 @@ A racing game written in C# using OpenTK
 
 # Controls
 - WASD: Steering
-- Esc: Leave game
+- Escape: Pause Menu
 
 # TODO
 ## Compulsory
 - Implement collisions or slowdown effect when leaving the track
 - Add a round timer and round counter
 - Add checkpoints on map to make a round count
-- Add a basic start and pause menu
-- Implement game states to handle menus etc.
 - Add particles
+- Improve menus
+- Improve game state logic
 
 ## Optional
 - AI enemies
