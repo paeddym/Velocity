@@ -2,17 +2,16 @@
 A racing game written in C# using OpenTK
 
 # Controls
-- B: Enable driving
 - WASD: Steering
 - Esc: Leave game
 
 # TODO
 ## Compulsory
-- Create a movable object
-- Make it seem like steering
-- Create a track to drive on -> Collisions
-- Timer
-- Add textures
+- Implement collisions or slowdown effect when leaving the track
+- Add a round timer and round counter
+- Add checkpoints on map to make a round count
+- Add a basic start and pause menu
+- Implement game states to handle menus etc.
 - Add particles
 
 ## Optional
