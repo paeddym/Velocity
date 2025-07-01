@@ -48,6 +48,7 @@ namespace Engine {
         }
 
         public void Draw() {
+            Console.WriteLine($"Drawing: {this.objectName}");
             this._shader.Use();
             this._texture.Use();
             scaleVector.X = scale;

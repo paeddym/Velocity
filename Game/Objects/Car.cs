@@ -69,7 +69,7 @@ namespace GameApp{
                 if (_speed > maxSpeed) _speed = maxSpeed;
             }
             else if (_keyboardState.IsKeyDown(Keys.S)){
-                _speed -= acceleration * _deltaTime;
+                _speed -= (acceleration+0.0008f)* _deltaTime;
                 if (_speed < revMaxSpeed) _speed = revMaxSpeed;
             }
             else{
@@ -122,11 +122,10 @@ namespace GameApp{
             float[] empty = {0f, 0f, -1f};
             foreach (var point in hitboxPoints)
             {
-                float[] hit = MapBuilder.CheckCollision("track3", point.X, point.Y);
+                float[] hit = MapBuilder.CheckCollision(GameLoop._trackName, point.X, point.Y);
                 if (hit[2] != -1) {
-                    Console.WriteLine($"Collision at X:{point.X} Y:{point.Y} Alpha:{hit[2]}");
                     if (hit[2] == 0) {
-                        this._speed = this._speed*(-1);
+                        this._speed = (this._speed*(-1))*0.5f;
                     }
                 }
             }
