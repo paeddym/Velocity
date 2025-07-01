@@ -10,7 +10,7 @@ namespace GameApp{
 
         Camera _camera; 
         Car _car;
-        string[] maps = {"track3"};
+        string[] tracks = {"track1","track2","track3"};
         private string[] _cars = {"recources/cars/Car_01.png",
                                   "recources/cars/Car_02.png",
                                   "recources/cars/Car_01.png",};
@@ -36,14 +36,7 @@ namespace GameApp{
             
             EngineCore.Initialize("recources/textures/container.jpg", true);
             InitializeGame();
-            
-            Shapes.Initialize();
 
-            MapBuilder.Initialize(maps);
-
-  
-            //GameObject test1 = new GameObject("test");
-            //ObjectManager.AddGameObject(test1);
             GameObject Map = new GameObject("track3", "track3");
             Map.scale = 40f;
             ObjectManager.AddGameObject(Map);
@@ -66,20 +59,17 @@ namespace GameApp{
 
             Vector3 color = new Vector3(0.5f, 0.8f, 0.2f);
 
-            if (GameStateManager.IsState(GameStateManager.GameState.MainMenu))
-            {
+            if (GameStateManager.IsState(GameStateManager.GameState.MainMenu)){
                 // Centered title
                 TextRenderer.RenderText("text", "Press Enter to Start", 20f, 120f, 0.7f, color);
                 // Centered instruction below
                 TextRenderer.RenderText("text", "Press Esc to Quit", 20f, 20f, 0.7f, color);
             }
-            else if (GameStateManager.IsState(GameStateManager.GameState.Playing))
-            {
+            else if (GameStateManager.IsState(GameStateManager.GameState.Playing)){
                 ObjectManager.DrawAll();
                 // Draw HUD, etc.
             }
-            else if (GameStateManager.IsState(GameStateManager.GameState.Paused))
-            {
+            else if (GameStateManager.IsState(GameStateManager.GameState.Paused)){
                 ObjectManager.DrawAll();
                 // Centered "Paused"
                 TextRenderer.RenderText("text", "Paused", 20f, 500f, 0.7f, color);
@@ -87,7 +77,6 @@ namespace GameApp{
                 TextRenderer.RenderText("text", "Press Esc to Resume", 20f, 20f, 0.7f, color);
                 TextRenderer.RenderText("text", "Press Enter for Main Menu", 20f, 120f, 0.7f, color);
             }
-
             SwapBuffers();
         }
 
@@ -115,7 +104,6 @@ namespace GameApp{
                     GameStateManager.ChangeState(GameStateManager.GameState.Playing);
                 else if (KeyboardState.IsKeyPressed(Keys.Enter))
                     GameStateManager.ChangeState(GameStateManager.GameState.MainMenu);
-                    // reset car to original position, reset timers in future
             }
         }
 
@@ -168,6 +156,9 @@ namespace GameApp{
 
             TextRenderer.Initialize();
             TextRenderer.GenerateFont("default", _fonts[0]);
+
+            Shapes.Initialize();
+            MapBuilder.Initialize(tracks);
         }
     }
 }

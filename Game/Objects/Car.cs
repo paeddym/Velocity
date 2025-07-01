@@ -26,8 +26,8 @@ namespace GameApp{
             FrameEventArgs _event = InputProvider.GetFrameEvent();
             float _deltaTime = (float)_event.Time;
             KeyboardState _keyboardState = InputProvider.GetKeyboardState();
-            float maxSpeed = 5f * _deltaTime;
-            float revMaxSpeed = -2.5f * _deltaTime;
+            float maxSpeed = 15f * _deltaTime;
+            float revMaxSpeed = -3.0f * _deltaTime;
 
 
             _car.objectPos.Z = .1f;
@@ -58,8 +58,8 @@ namespace GameApp{
             }
 
             
-            float acceleration = 0.001f;     // Acceleration rate
-            float deceleration = 0.00005f;     // Reverse acceleration rate
+            float acceleration = 0.0005f;     // Acceleration rate
+            float deceleration = 0.000000005f;     // Reverse acceleration rate
 
             checkPointCollision();
 
