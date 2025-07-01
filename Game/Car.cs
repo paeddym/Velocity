@@ -9,10 +9,17 @@ namespace GameApp{
         private float _speed = 0f;
         private string _name;
         private Camera _camera;
+        private GameObject _car;
+
+        Vector2[] localOffsets;
+        List<Vector2> hitboxPoints;
 
         public Car(string name, Camera camera) {
             this._name = name;
             this._camera = camera;
+            this._car = ObjectManager.GetGameObject(this._name);
+            this._car.objectPos.X = -15.5f;
+            this._car.objectPos.Y = 0.3f;
         }
 
         public void Drive() {
@@ -22,99 +29,110 @@ namespace GameApp{
             float maxSpeed = 5f * _deltaTime;
             float revMaxSpeed = -2.5f * _deltaTime;
 
-            GameObject car = ObjectManager.GetGameObject(this._name);
-            car.objectPos.Z = .1f;
 
-            // Constants
+            _car.objectPos.Z = .1f;
+
+            float carAngle = _car.objectPos.W;
+            float halfWidth = 0.2f;
+            float halfLength = 0.45f;
+
+            // Rotation matrix
+            float cos = (float)Math.Cos(carAngle);
+            float sin = (float)Math.Sin(carAngle);
+
+            // Define corners of car in local space
+            this.localOffsets = new Vector2[] {
+                new Vector2(-halfWidth, -halfLength), // back-left
+                new Vector2(halfWidth, -halfLength),  // back-right
+                new Vector2(-halfWidth, halfLength),  // front-left
+                new Vector2(halfWidth, halfLength),   // front-right
+            };
+
+            // Transform to world space
+            this.hitboxPoints = new List<Vector2>();
+            foreach (var offset in localOffsets)
+            {
+                float worldX = _car.objectPos.X + (offset.X * cos - offset.Y * sin);
+                float worldY = _car.objectPos.Y + (offset.X * sin + offset.Y * cos);
+                hitboxPoints.Add(new Vector2(worldX, worldY));
+            }
+
+            
             float acceleration = 0.001f;     // Acceleration rate
             float deceleration = 0.00005f;     // Reverse acceleration rate
 
+            checkPointCollision();
+
             // Apply input
-            if (_keyboardState.IsKeyDown(Keys.W))
-            {
+            if (_keyboardState.IsKeyDown(Keys.W)){
                 _speed += acceleration * _deltaTime;
                 if (_speed > maxSpeed) _speed = maxSpeed;
             }
-            else if (_keyboardState.IsKeyDown(Keys.S))
-            {
+            else if (_keyboardState.IsKeyDown(Keys.S)){
                 _speed -= acceleration * _deltaTime;
                 if (_speed < revMaxSpeed) _speed = revMaxSpeed;
             }
             else
             {
                 // Optional: natural friction to stop when no input
-                if (_speed > 0)
-                {
+                if (_speed > 0){
                     _speed -= acceleration * _deltaTime;
                     if (_speed < 0) _speed = 0;
                 }
-                else if (_speed < 0)
-                {
+                else if (_speed < 0){
                     _speed += acceleration * _deltaTime;
                     if (_speed > 0) _speed = 0;
                 }
             }
 
             // Adjust steering based on whether the car is moving forward or backward
-            if (_keyboardState.IsKeyDown(Keys.A) && _speed != 0)
-            {
-                if (_speed > 0)
-                {
-                    car.objectPos.W += 1.5f * _deltaTime;
+            if (_keyboardState.IsKeyDown(Keys.A) && _speed != 0){
+                if (_speed > 0){
+                    _car.objectPos.W += 1.5f * _deltaTime;
                 }
-                else
-                {
-                    car.objectPos.W -= 1.5f * _deltaTime;
+                else{
+                    _car.objectPos.W -= 1.5f * _deltaTime;
                 }
             }
 
-            if (_keyboardState.IsKeyDown(Keys.D) && _speed != 0)
-            {
-                if (_speed > 0)
-                {
-                    car.objectPos.W -= 1.5f * _deltaTime;
+            if (_keyboardState.IsKeyDown(Keys.D) && _speed != 0){
+                if (_speed > 0){
+                    _car.objectPos.W -= 1.5f * _deltaTime;
                 }
-                else
-                {
-                    car.objectPos.W += 1.5f * _deltaTime;
+                else{
+                    _car.objectPos.W += 1.5f * _deltaTime;
                 }
             }
 
-            car.front.X = (float)Math.Sin(-1 * car.objectPos.W);
-            car.front.Y = (float)Math.Cos(car.objectPos.W);
+            _car.front.X = (float)Math.Sin(-1 * _car.objectPos.W);
+            _car.front.Y = (float)Math.Cos(_car.objectPos.W);
 
             //_posX = _posX + front.X * _speed;
             //_posY = _posY + front.Y * _speed;
-            car.objectPos.X = car.objectPos.X + car.front.X * _speed;
-            car.objectPos.Y = car.objectPos.Y + car.front.Y * _speed;
+            _car.objectPos.X = _car.objectPos.X + _car.front.X * _speed;
+            _car.objectPos.Y = _car.objectPos.Y + _car.front.Y * _speed;
 
-            _camera.UseLockCam(car.objectPos.X, car.objectPos.Y, car.objectPos.W);
-
-            float[] collision = {0f, 0f, 0f};
-
-            collision = MapBuilder.CheckCollision("map3", car.objectPos.X, car.objectPos.Y);
-            if (collision[2] != -1){
-                Console.WriteLine($"Alpha under car: X:{collision[0]} Y:{collision[1]} A:{collision[2]}");
-            }else {
-                Console.WriteLine($"No collision Car probaply out of Map");
-                Console.WriteLine($"Car Pos: X: {car.objectPos.X} Y: {car.objectPos.Y}" + 
-                        $"coll array: {collision[0]},{collision[1]},{collision[2]}");
-            }
-
+            _camera.UseLockCam(_car.objectPos.X, _car.objectPos.Y, _car.objectPos.W);
         }
 
-        public void BounceBack()
-        {
-            Console.WriteLine("Car bounce back");
-            _speed = -_speed; 
-        }
-
-        // Optional: size if needed
-        public Vector2 GetSize()
-        {
+        public Vector2 GetSize(){
             return new Vector2(1.0f, 1.0f);
         }
 
+        private float[] checkPointCollision() {
+            float[] empty = {0f, 0f, -1f};
+            foreach (var point in hitboxPoints)
+            {
+                float[] hit = MapBuilder.CheckCollision("map3", point.X, point.Y);
+                if (hit[2] != -1) {
+                    Console.WriteLine($"Collision at X:{point.X} Y:{point.Y} Alpha:{hit[2]}");
+                    if (hit[2] == 0) {
+                        this._speed = this._speed*(-1);
+                    }
+                }
+            }
+            return empty;
+        }
 
         ~Car()
         {
