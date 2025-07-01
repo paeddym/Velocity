@@ -33,7 +33,7 @@ namespace GameApp{
             _car.objectPos.Z = .1f;
 
             float carAngle = _car.objectPos.W;
-            float halfWidth = 0.2f;
+            float halfWidth = 0.3f;
             float halfLength = 0.45f;
 
             // Rotation matrix
@@ -72,8 +72,7 @@ namespace GameApp{
                 _speed -= acceleration * _deltaTime;
                 if (_speed < revMaxSpeed) _speed = revMaxSpeed;
             }
-            else
-            {
+            else{
                 // Optional: natural friction to stop when no input
                 if (_speed > 0){
                     _speed -= acceleration * _deltaTime;
@@ -123,7 +122,7 @@ namespace GameApp{
             float[] empty = {0f, 0f, -1f};
             foreach (var point in hitboxPoints)
             {
-                float[] hit = MapBuilder.CheckCollision("map3", point.X, point.Y);
+                float[] hit = MapBuilder.CheckCollision("track3", point.X, point.Y);
                 if (hit[2] != -1) {
                     Console.WriteLine($"Collision at X:{point.X} Y:{point.Y} Alpha:{hit[2]}");
                     if (hit[2] == 0) {

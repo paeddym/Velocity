@@ -10,7 +10,16 @@ namespace GameApp{
 
         Camera _camera; 
         Car _car;
-        string[] maps = {"map3"};
+        string[] maps = {"track3"};
+        private string[] _cars = {"recources/cars/Car_01.png",
+                                  "recources/cars/Car_02.png",
+                                  "recources/cars/Car_01.png",};
+
+        private string[] _tracks={"recources/tracks/Track_01.png",
+                                  "recources/tracks/Track_01.png",
+                                  "recources/tracks/Track_01.png",};
+
+        private string[] _fonts = {"recources/fonts/04B_30__.TTF"};
 
         public Game(int width, int height, string title) : 
             base(GameWindowSettings.Default, new NativeWindowSettings() { ClientSize = (width, height), Title = title }) {}
@@ -24,33 +33,29 @@ namespace GameApp{
             //CursorState = CursorState.Grabbed;
             // Initialize the EngineCore aka default shader and texture
             // All other game initalisations need to be done after the Engine Init
-            EngineCore.Initialize("shaders/default.vert", "shaders/default.frag", 
-                    "recources/textures/container.jpg", true);
-
-            ResourceManager.LoadShader("text", "shaders/textUI.vert", "shaders/textUI.frag");
-            TextRenderer.Initialize();
-            TextRenderer.GenerateFont("default", "recources/fonts/04B_30__.TTF");
+            
+            EngineCore.Initialize("recources/textures/container.jpg", true);
+            InitializeGame();
+            
             Shapes.Initialize();
 
-            ResourceManager.LoadTexture("car", "recources/cars/Car_01.png");
-            ResourceManager.LoadTexture("map3", "recources/tracks/Track_03.png");
             MapBuilder.Initialize(maps);
 
   
             //GameObject test1 = new GameObject("test");
             //ObjectManager.AddGameObject(test1);
-            GameObject Map = new GameObject("map3", "map3");
+            GameObject Map = new GameObject("track3", "track3");
             Map.scale = 40f;
             ObjectManager.AddGameObject(Map);
 
-            GameObject test = new GameObject("car", "car");
+            GameObject test = new GameObject("car1", "car1");
             test.scale = 1f;
             ObjectManager.AddGameObject(test);
 
             
             
             _camera = new Camera();
-            _car = new Car("car", _camera);
+            _car = new Car("car1", _camera);
 
             base.OnLoad();
         }
@@ -145,6 +150,25 @@ namespace GameApp{
             GL.UseProgram(0);
         }
 
+        private void InitializeGame(){
+            //Load all cars and tracks
+            int i = 1;
+            foreach (string texture in _cars) {
+                ResourceManager.LoadTexture($"car{i}", texture);
+                i = i + 1;
+            }
+            i = 1;
+            foreach (string texture in _tracks) {
+                ResourceManager.LoadTexture($"track{i}", texture);
+                i = i + 1;
+            }
+            //Load all shaders
+            ResourceManager.LoadShader("default", "shaders/default.vert", "shaders/default.frag");
+            ResourceManager.LoadShader("text", "shaders/textUI.vert", "shaders/textUI.frag");
+
+            TextRenderer.Initialize();
+            TextRenderer.GenerateFont("default", _fonts[0]);
+        }
     }
 }
 
