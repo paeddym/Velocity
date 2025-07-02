@@ -103,7 +103,7 @@ namespace Engine {
             needReset = true;
             _shader.Use();
 
-            position = new Vector3(x, y, 50.0f);
+            position = new Vector3(x, y, 15.0f);
 
             Matrix4 rotationZ = Matrix4.CreateRotationZ(rotZ);
 
