@@ -121,8 +121,6 @@ namespace GameApp{
                 }
                 if(KeyboardState.IsKeyPressed(Keys.Enter)){
                     GameLoop.InitGameLoop($"car{_mapSelection}", $"track{_mapSelection}");
-                    Console.WriteLine("switch to playing after Mapselection");
-                    Console.WriteLine(_mapSelection);
                     GameStateManager.ChangeState(GameStateManager.GameState.Playing);
                 }
             }

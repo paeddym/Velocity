@@ -34,9 +34,7 @@ namespace GameApp{
         }
 
         public static void InitGameLoop(string car, string track){
-            Console.WriteLine($"initNewLoop with car: {car} and {track}");
             if(isLoopInit == true){
-                Console.WriteLine("deleting stuff in GameLoop");
                ObjectManager.DeleteGameObject(_carName);
                ObjectManager.DeleteGameObject(_trackName);
                
