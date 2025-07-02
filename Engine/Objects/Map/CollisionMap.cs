@@ -25,12 +25,11 @@ namespace Engine {
             }
         }
 
-        /// <summary>
         /// Returns a float[3] where:
         /// [0] = world X
         /// [1] = world Y
         /// [2] = alpha at that point (0 = transparent, 1 = opaque, -1 = out of bounds)
-        /// </summary>
+        ///     = alpha at that point (0 = no track,    1 = track,  -1 = car out of map, 0.6 = start/finish line, 0.5 = chekcpoint line)
         public float[] IsSolid(float worldX, float worldY, float mapPosX, float mapPosY, float mapWidth, float mapHeight) {
             float[] collisionPos = { 0f, 0f, -1f };
 

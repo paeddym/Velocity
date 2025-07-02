@@ -10,7 +10,7 @@ namespace GameApp{
 
         private int _mapSelection = 1;
 
-        string[] tracks = {"track1","track2","track3"};
+        string[] tracks = {"track1hitbox","track2hitbox","track3hitbox"};
         private string[] _cars = {"recources/cars/Car_01.png",
                                   "recources/cars/Car_02.png",
                                   "recources/cars/Car_03.png",};
@@ -18,6 +18,10 @@ namespace GameApp{
         private string[] _tracks={"recources/tracks/Track_01.png",
                                   "recources/tracks/Track_02.png",
                                   "recources/tracks/Track_03.png",};
+
+        private string[] _trackHitbox={"recources/tracks/Track_01_hitbox.png",
+                                       "recources/tracks/Track_02_hitbox.png",
+                                       "recources/tracks/Track_03_hitbox.png",};
 
         private string[] _fonts = {"recources/fonts/04B_30__.TTF"};
 
@@ -179,6 +183,11 @@ namespace GameApp{
             i = 1;
             foreach (string texture in _tracks) {
                 ResourceManager.LoadTexture($"track{i}", texture);
+                i = i + 1;
+            }
+            i = 1;
+            foreach (string texture in _trackHitbox) {
+                ResourceManager.LoadTexture($"track{i}hitbox", texture);
                 i = i + 1;
             }
             //Load all shaders
