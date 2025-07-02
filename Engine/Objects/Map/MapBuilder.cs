@@ -12,7 +12,7 @@ namespace Engine {
         }
 
         public static float[] CheckCollision(string map, float carPosX, float carPoxY){
-            CollisionMap collisionMap = GetCollisionMap(map);
+            CollisionMap collisionMap = GetCollisionMap(map+"hitbox");
             GameObject ?mapObj = ObjectManager.GetGameObject(map);
             float[] collision = {0f, 0f, 0f};
             collision = collisionMap.IsSolid(carPosX, carPoxY, mapObj.objectPos.X, 

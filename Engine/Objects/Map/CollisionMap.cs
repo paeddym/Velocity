@@ -20,7 +20,7 @@ namespace Engine {
                 for (int x = 0; x < width; x++) {
                     int index = (y * width + x) * 4;
                     byte alpha = data[index + 3];
-                    solidMap[x, y] = alpha / 255f; // Normalize to 0.0 - 1.0
+                    solidMap[x, y] = alpha; // Normalize to 0.0 - 1.0
                 }
             }
         }
@@ -29,7 +29,7 @@ namespace Engine {
         /// [0] = world X
         /// [1] = world Y
         /// [2] = alpha at that point (0 = transparent, 1 = opaque, -1 = out of bounds)
-        ///     = alpha at that point (0 = no track,    1 = track,  -1 = car out of map, 0.6 = start/finish line, 0.5 = chekcpoint line)
+        ///     = alpha at that point (0 = no track,    1 = track,  -1 = car out of map, 0.4 = start/finish line, 0.5 = chekcpoint line)
         public float[] IsSolid(float worldX, float worldY, float mapPosX, float mapPosY, float mapWidth, float mapHeight) {
             float[] collisionPos = { 0f, 0f, -1f };
 

@@ -10,6 +10,7 @@ namespace GameApp{
         private string _name;
         private Camera _camera;
         private GameObject _car;
+        private bool _dummyStart = false;
 
         Vector2[] localOffsets;
         List<Vector2> hitboxPoints;
@@ -125,7 +126,14 @@ namespace GameApp{
                 float[] hit = MapBuilder.CheckCollision(GameLoop._trackName, point.X, point.Y);
                 if (hit[2] != -1) {
                     if (hit[2] == 0) {
-                        this._speed = (this._speed*(-1))*0.5f;
+                        this._speed = (this._speed*(-1));
+                    }
+                    if(hit[2] == 102) {
+                        _dummyStart = true;
+                        Console.WriteLine("Car crosses start/finish line");
+                    }
+                    if(hit[2] == 127) {
+                        Console.WriteLine("Car crosses checkpoint line");
                     }
                 }
             }
