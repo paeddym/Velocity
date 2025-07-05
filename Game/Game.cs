@@ -81,8 +81,15 @@ namespace GameApp{
                 ObjectManager.DrawAll();
                 TextRenderer.RenderText("text", $"Speed: {GameLoop.CarInstance.getSpeed():F1}", 30f, 30f, 0.4f, color);
                 TextRenderer.RenderText("text", $"Lap: {GameLoop.lapCount}/{GameLoop.maxLaps}", 60f, 60f, 0.4f, color);
-            }
 
+                if (GameLoop.CurrentState == GameLoop.LoopState.CountDown)
+                {
+                    int countdownValue = (int)MathF.Ceiling(GameLoop.CountdownTime);
+                    string display = countdownValue > 0 ? countdownValue.ToString() : "GO!";
+                    TextRenderer.RenderText("text", display, 380f, 300f, 2.0f, color);
+                }
+            }
+            
             if(GameStateManager.IsState(GameStateManager.GameState.Finished)){
                 ObjectManager.DrawAll();
                 TextRenderer.RenderText("text", "Finished!", 260f, 500f, 0.7f, color);

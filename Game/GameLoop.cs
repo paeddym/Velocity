@@ -4,13 +4,13 @@ namespace GameApp{
     public static class GameLoop{
 
         public enum LoopState{
-            LapStop,
+            CountDown,
             LapStart,
             CheckPoint,
         };
         private static bool isLoopInit = false;
 
-        private static LoopState _currentState = LoopState.LapStart;
+        private static LoopState _currentState = LoopState.CountDown;
         public static LoopState CurrentState => _currentState;
 
         public static string _trackName = "none";
@@ -28,6 +28,10 @@ namespace GameApp{
         public static int lapCount = 1;
 
         private static GameObject _map;
+
+        private static float _countdownTime = 3.0f; // Countdown from 3 seconds
+        public static float CountdownTime => _countdownTime;
+        private static bool _countdownStarted = false;
 
         public static void ChangeState(LoopState newState){
             _currentState = newState;
@@ -59,12 +63,33 @@ namespace GameApp{
             test.scale = 1f;
             ObjectManager.AddGameObject(test);
 
+            lapCount = 1;
+
             _car = new Car(car, _camera);
+            _countdownTime = 3.0f;
+            _countdownStarted = false;
+            _currentState = LoopState.CountDown;
         }
 
         public static void UpdateGame(){
             //Here the car.Drive() and other game logik like start, finish of the timer will done
             //also things like update the UI
+            if (IsState(LoopState.CountDown))
+            {
+                if (!_countdownStarted)
+                {
+                    _countdownStarted = true;
+                    _car.Drive();
+                }
+                _countdownTime -= (float)InputProvider.GetFrameEvent().Time;
+                if (_countdownTime <= -1f)
+                {
+                    _countdownTime = 0f;
+                    _countdownStarted = false;
+                    ChangeState(LoopState.LapStart);
+                }
+                return;
+            }
             _car.Drive();
         }
 
