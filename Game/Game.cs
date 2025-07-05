@@ -82,6 +82,7 @@ namespace GameApp{
                 TextRenderer.RenderText("text", $"Speed: {GameLoop.CarInstance.getSpeed():F0}", 30f, 30f, 0.4f, color);
                 TextRenderer.RenderText("text", $"Lap: {GameLoop.LapCount}/{GameLoop.MaxLaps}", 60f, 60f, 0.4f, color);
                 TextRenderer.RenderText("text", $"Time: {FormatHelper.FormatTime(GameLoop.CurrentTime)}", 550f, 570f, 0.4f, color);
+                TextRenderer.RenderText("text", GameLoop.BestLapTime < double.MaxValue ? $"Best: {FormatHelper.FormatTime(GameLoop.BestLapTime)}" : "", 550f, 540f, 0.4f, color);
 
                 if (GameLoop.CurrentState == GameLoop.LoopState.CountDown)
                 {
@@ -93,9 +94,11 @@ namespace GameApp{
             
             if(GameStateManager.IsState(GameStateManager.GameState.Finished)){
                 ObjectManager.DrawAll();
-                TextRenderer.RenderText("text", "Finished!", 270f, 500f, 0.7f, color);
-                TextRenderer.RenderText("text", "Press Esc to Quit Game", 20f, 20f, 0.5f, color);
-                TextRenderer.RenderText("text", "Press Enter for Main Menu", 130f, 300f, 0.5f, color);
+                TextRenderer.RenderText("text", "Finished!", 280f, 500f, 0.7f, color);
+                TextRenderer.RenderText("text", $"Finished in: {FormatHelper.FormatTime(GameLoop.CurrentTime)}", 150f, 390f, 0.7f, color);
+                TextRenderer.RenderText("text", $"Best Lap: {FormatHelper.FormatTime(GameLoop.BestLapTime)}", 170f, 340f, 0.7f, color);
+                TextRenderer.RenderText("text", "Press Esc to Quit Game", 20f, 20f, 0.3f, color);
+                TextRenderer.RenderText("text", "Press Enter for Main Menu", 490f, 20f, 0.3f, color);
             }
 
             if (GameStateManager.IsState(GameStateManager.GameState.Paused)){

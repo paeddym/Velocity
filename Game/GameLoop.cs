@@ -26,7 +26,12 @@ namespace GameApp{
         private static double _currentTime = 0f;
         public static double CurrentTime => _currentTime;
 
-        private static int _maxLaps = 1;
+        private static double _currentLapTime = 0f;
+        private static double _previousLapStart = 0f;
+        private static double _bestLapTime = double.MaxValue;
+        public static double BestLapTime => _bestLapTime;
+
+        private static int _maxLaps = 3;
         public static int MaxLaps => _maxLaps;
 
         private static int _lapCount = 1;
@@ -49,9 +54,9 @@ namespace GameApp{
 
         public static void InitGameLoop(string car, string track){
             if(isLoopInit == true){
-               ObjectManager.DeleteGameObject(_carName);
-               ObjectManager.DeleteGameObject(_trackName);
-               
+                ObjectManager.DeleteGameObject(_carName);
+                ObjectManager.DeleteGameObject(_trackName);
+
             }
             else{
                 _camera = new Camera();
@@ -68,7 +73,7 @@ namespace GameApp{
             GameObject test = new GameObject(car, car);
             test.scale = 1f;
             ObjectManager.AddGameObject(test);
-                    
+
             _car = new Car(car, _camera);
             _countdownTime = 3.0f;
             _countdownStarted = false;
@@ -77,6 +82,9 @@ namespace GameApp{
             _startTime = 0;
             _currentTime = 0;
             _totalElapsedTime = 0;
+            _currentLapTime = 0;
+            _previousLapStart = 0;
+            _bestLapTime = double.MaxValue;
         }
 
         public static void UpdateGame(){
@@ -97,14 +105,16 @@ namespace GameApp{
                 if (_countdownTime <= -1f)
                 {
                     _countdownTime = 0f;
-                    _countdownStarted = false;                                      
+                    _countdownStarted = false;
                     _startTime = _totalElapsedTime;
+                    _previousLapStart = _startTime;
 
                     ChangeState(LoopState.LapStart);
                 }
                 return;
             }
-            _currentTime = _totalElapsedTime - _startTime;   
+            _currentTime = _totalElapsedTime - _startTime;
+            _currentLapTime = _totalElapsedTime - _previousLapStart;
             _car.Drive();
         }
 
@@ -113,6 +123,11 @@ namespace GameApp{
             if (id == 102 && IsState(LoopState.CheckPoint) && _lapCount <= _maxLaps)
             {
                 _lapCount++;
+                if (_currentLapTime < _bestLapTime)
+                {
+                    _bestLapTime = _currentLapTime;
+                }
+                _previousLapStart = _totalElapsedTime;
                 ChangeState(LoopState.LapStart);
             } else if (id == 127) {
                 ChangeState(LoopState.CheckPoint);
