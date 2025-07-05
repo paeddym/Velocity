@@ -56,9 +56,8 @@ namespace GameApp{
 
         public static void InitGameLoop(string car, string track){
             if(isLoopInit == true){
-                ObjectManager.DeleteGameObject(_carName);
-                ObjectManager.DeleteGameObject(_trackName);
-
+               ObjectManager.DeleteGameObject(_carName);
+               ObjectManager.DeleteGameObject(_trackName);
             }
             else{
                 _camera = new Camera();
