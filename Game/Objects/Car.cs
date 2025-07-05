@@ -144,7 +144,7 @@ namespace GameApp{
 
         public float getSpeed()
         {
-            return _speed * 100000f; //Arbitrary scaling for speed
+            return _speed * 100000f; //Arbitrary scaling to make speed more legible
         }
 
         ~Car()

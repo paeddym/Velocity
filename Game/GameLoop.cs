@@ -35,7 +35,7 @@ namespace GameApp{
 
         private static GameObject _map;
 
-        private static float _countdownTime = 3.0f; // Countdown from 3 seconds
+        private static float _countdownTime = 3f;
         public static float CountdownTime => _countdownTime;
         private static bool _countdownStarted = false;
 
@@ -90,7 +90,7 @@ namespace GameApp{
                 if (!_countdownStarted)
                 {
                     _countdownStarted = true;
-                    // So the car gets drawn once instead of a wide angle shot of the track
+                    // So the car gets drawn properly during countdown instead of a wide angle shot of the track
                     _car.Drive();
                 }
                 _countdownTime -= (float)_event.Time;

@@ -100,9 +100,7 @@ namespace GameApp{
 
             if (GameStateManager.IsState(GameStateManager.GameState.Paused)){
                 ObjectManager.DrawAll();
-                // Centered "Paused"
                 TextRenderer.RenderText("text", "Game Paused", 250f, 500f, 0.7f, color);
-                // Instructions below
                 TextRenderer.RenderText("text", "Press Esc to Resume", 130f, 300f, 0.7f, color);
                 TextRenderer.RenderText("text", "Press Enter for Main Menu", 20f, 20f, 0.5f, color);
             }
