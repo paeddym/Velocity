@@ -155,7 +155,7 @@ namespace GameApp{
                     GameStateManager.ChangeState(GameStateManager.GameState.MainMenu);
             }
 
-            else if (GameStateManager.IsState(GameStateManager.GameState.Paused)) {
+            else if (GameStateManager.IsState(GameStateManager.GameState.Paused)){
                 if (KeyboardState.IsKeyPressed(Keys.Escape))
                     GameStateManager.ChangeState(GameStateManager.GameState.Playing);
                 if (KeyboardState.IsKeyPressed(Keys.Enter))

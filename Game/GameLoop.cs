@@ -82,6 +82,7 @@ namespace GameApp{
                 if (!_countdownStarted)
                 {
                     _countdownStarted = true;
+                    // So the car gets drawn once instead of a wide angle shot of the track
                     _car.Drive();
                 }
                 _countdownTime -= (float)InputProvider.GetFrameEvent().Time;
