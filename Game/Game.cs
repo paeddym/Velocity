@@ -63,25 +63,29 @@ namespace GameApp{
                 TextRenderer.RenderText("text", "use the arrow keys", 200f, 480f, 0.4f, color);
                 if(_mapSelection == 1){
                     TextRenderer.RenderText("text", "Track 01 (easy)<", 130f, 400f, 0.7f, color);
+                    TextRenderer.RenderText("text", LapTimeStorage.LoadBestLapTime("track1") is double t ? $"Best Time: {FormatHelper.FormatTime(t)}" : "", 130f, 360f, 0.5f, color);
                     TextRenderer.RenderText("text", "Track 02 (medium)", 130f, 300f, 0.7f, color);
                     TextRenderer.RenderText("text", "Track 03 (hard)", 130f, 200f, 0.7f, color);
                 }
                 if(_mapSelection == 2){
                     TextRenderer.RenderText("text", "Track 01 (easy)", 130f, 400f, 0.7f, color);
                     TextRenderer.RenderText("text", "Track 02 (medium)<", 130f, 300f, 0.7f, color);
+                    TextRenderer.RenderText("text", LapTimeStorage.LoadBestLapTime("track2") is double t ? $"Best Time: {FormatHelper.FormatTime(t)}" : "", 130f, 260f, 0.5f, color);
                     TextRenderer.RenderText("text", "Track 03 (hard)", 130f, 200f, 0.7f, color);
                 }
                 if(_mapSelection == 3){
                     TextRenderer.RenderText("text", "Track 01 (easy)", 130f, 400f, 0.7f, color);
                     TextRenderer.RenderText("text", "Track 02 (medium)", 130f, 300f, 0.7f, color);
                     TextRenderer.RenderText("text", "Track 03 (hard)<", 130f, 200f, 0.7f, color);
+                    TextRenderer.RenderText("text", LapTimeStorage.LoadBestLapTime("track3") is double t ? $"Best Time: {FormatHelper.FormatTime(t)}" : "", 130f, 160f, 0.5f, color);
                 }
             }
             if (GameStateManager.IsState(GameStateManager.GameState.Playing)){
                 ObjectManager.DrawAll();
                 TextRenderer.RenderText("text", $"Speed: {GameLoop.CarInstance.getSpeed():F0}", 30f, 30f, 0.4f, color);
-                TextRenderer.RenderText("text", $"Lap: {GameLoop.LapCount}/{GameLoop.MaxLaps}", 60f, 60f, 0.4f, color);
+                TextRenderer.RenderText("text", $"Lap: {GameLoop.LapCount}/{GameLoop.MaxLaps}", 30f, 60f, 0.4f, color);
                 TextRenderer.RenderText("text", $"Time: {FormatHelper.FormatTime(GameLoop.CurrentTime)}", 550f, 570f, 0.4f, color);
+                TextRenderer.RenderText("text", GameLoop.TrackRecord < double.MaxValue ? $"Record: {FormatHelper.FormatTime(GameLoop.TrackRecord)}" : "", 30f, 570f, 0.4f, color);
                 TextRenderer.RenderText("text", GameLoop.BestLapTime < double.MaxValue ? $"Best: {FormatHelper.FormatTime(GameLoop.BestLapTime)}" : "", 550f, 540f, 0.4f, color);
 
                 if (GameLoop.CurrentState == GameLoop.LoopState.CountDown)
@@ -95,8 +99,9 @@ namespace GameApp{
             if(GameStateManager.IsState(GameStateManager.GameState.Finished)){
                 ObjectManager.DrawAll();
                 TextRenderer.RenderText("text", "Finished!", 280f, 500f, 0.7f, color);
-                TextRenderer.RenderText("text", $"Finished in: {FormatHelper.FormatTime(GameLoop.CurrentTime)}", 150f, 390f, 0.7f, color);
-                TextRenderer.RenderText("text", $"Best Lap: {FormatHelper.FormatTime(GameLoop.BestLapTime)}", 170f, 340f, 0.7f, color);
+                TextRenderer.RenderText("text", GameLoop.CurrentTime == GameLoop.TrackRecord ? "New track record!" : "", 140f, 400f, 0.7f, color);
+                TextRenderer.RenderText("text", $"Finished in: {FormatHelper.FormatTime(GameLoop.CurrentTime)}", 150f, 340f, 0.7f, color);
+                TextRenderer.RenderText("text", $"Best Lap: {FormatHelper.FormatTime(GameLoop.BestLapTime)}", 170f, 300f, 0.7f, color);
                 TextRenderer.RenderText("text", "Press Esc to Quit Game", 20f, 20f, 0.3f, color);
                 TextRenderer.RenderText("text", "Press Enter for Main Menu", 490f, 20f, 0.3f, color);
             }

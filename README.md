@@ -7,8 +7,6 @@ A racing game written in C# using OpenTK
 
 # TODO
 ## Compulsory
-- Track fastest lap
-- Track fastest races (and maybe store them locally)
 - Make map prettier
 - Add particles
 

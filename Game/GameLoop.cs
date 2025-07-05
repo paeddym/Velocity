@@ -30,6 +30,8 @@ namespace GameApp{
         private static double _previousLapStart = 0f;
         private static double _bestLapTime = double.MaxValue;
         public static double BestLapTime => _bestLapTime;
+        private static double _trackRecord = double.MaxValue;
+        public static double TrackRecord => _trackRecord;
 
         private static int _maxLaps = 3;
         public static int MaxLaps => _maxLaps;
@@ -85,6 +87,16 @@ namespace GameApp{
             _currentLapTime = 0;
             _previousLapStart = 0;
             _bestLapTime = double.MaxValue;
+
+            // Load best lap time from file if available
+            var fileBest = LapTimeStorage.LoadBestLapTime(_trackName);
+            if (fileBest.HasValue)
+            {
+                _trackRecord = fileBest.Value;
+            } else
+            {
+                _trackRecord = double.MaxValue;
+            }  
         }
 
         public static void UpdateGame(){
@@ -125,7 +137,7 @@ namespace GameApp{
                 _lapCount++;
                 if (_currentLapTime < _bestLapTime)
                 {
-                    _bestLapTime = _currentLapTime;
+                    _bestLapTime = _currentLapTime;                   
                 }
                 _previousLapStart = _totalElapsedTime;
                 ChangeState(LoopState.LapStart);
@@ -135,7 +147,11 @@ namespace GameApp{
 
             if (_lapCount > _maxLaps)
             {
-                GameStateManager.ChangeState(GameStateManager.GameState.Finished);
+                if(_currentTime < _trackRecord) {
+                    _trackRecord = _currentTime;
+                    LapTimeStorage.SaveBestLapTime(_trackName, _trackRecord);
+                }
+                GameStateManager.ChangeState(GameStateManager.GameState.Finished);                
             }
         }
     }
