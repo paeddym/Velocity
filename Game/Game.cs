@@ -79,8 +79,16 @@ namespace GameApp{
             }
             if (GameStateManager.IsState(GameStateManager.GameState.Playing)){
                 ObjectManager.DrawAll();
+                TextRenderer.RenderText("text", $"Speed: {GameLoop.CarInstance.getSpeed():F1}", 30f, 30f, 0.4f, color);
+                TextRenderer.RenderText("text", $"Lap: {GameLoop.lapCount}/{GameLoop.maxLaps}", 60f, 60f, 0.4f, color);
             }
 
+            if(GameStateManager.IsState(GameStateManager.GameState.Finished)){
+                ObjectManager.DrawAll();
+                TextRenderer.RenderText("text", "Finished!", 260f, 500f, 0.7f, color);
+                TextRenderer.RenderText("text", "Press Esc to Quit Game", 20f, 20f, 0.5f, color);
+                TextRenderer.RenderText("text", "Press Enter for Main Menu", 130f, 300f, 0.5f, color);
+            }
 
             if (GameStateManager.IsState(GameStateManager.GameState.Paused)){
                 ObjectManager.DrawAll();
@@ -133,8 +141,14 @@ namespace GameApp{
                 if (KeyboardState.IsKeyPressed(Keys.Escape))
                     GameStateManager.ChangeState(GameStateManager.GameState.Paused);
             }
+            else if (GameStateManager.IsState(GameStateManager.GameState.Finished)){
+                if (KeyboardState.IsKeyPressed(Keys.Escape))
+                    Close();
+                if (KeyboardState.IsKeyPressed(Keys.Enter))
+                    GameStateManager.ChangeState(GameStateManager.GameState.MainMenu);
+            }
 
-            else if (GameStateManager.IsState(GameStateManager.GameState.Paused)){
+            else if (GameStateManager.IsState(GameStateManager.GameState.Paused)) {
                 if (KeyboardState.IsKeyPressed(Keys.Escape))
                     GameStateManager.ChangeState(GameStateManager.GameState.Playing);
                 if (KeyboardState.IsKeyPressed(Keys.Enter))

@@ -10,7 +10,7 @@ namespace GameApp{
         };
         private static bool isLoopInit = false;
 
-        private static LoopState _currentState = LoopState.LapStop;
+        private static LoopState _currentState = LoopState.LapStart;
         public static LoopState CurrentState => _currentState;
 
         public static string _trackName = "none";
@@ -18,10 +18,14 @@ namespace GameApp{
 
         private static Camera _camera;
         private static Car _car;
+        public static Car CarInstance => _car;
 
         private static bool _timerRunning;
         private static ulong _startTime= 0;
         private static ulong _currentTime = 0;
+
+        public static int maxLaps = 1;
+        public static int lapCount = 1;
 
         private static GameObject _map;
 
@@ -62,6 +66,22 @@ namespace GameApp{
             //Here the car.Drive() and other game logik like start, finish of the timer will done
             //also things like update the UI
             _car.Drive();
+        }
+
+        public static void HandleLapping(int id)
+        {
+            if (id == 102 && IsState(LoopState.CheckPoint) && lapCount <= maxLaps)
+            {
+                lapCount++;
+                ChangeState(LoopState.LapStart);
+            } else if (id == 127) {
+                ChangeState(LoopState.CheckPoint);
+            }
+
+            if (lapCount > maxLaps)
+            {
+                GameStateManager.ChangeState(GameStateManager.GameState.Finished);
+            }
         }
     }
 }
