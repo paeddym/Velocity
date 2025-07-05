@@ -1,4 +1,5 @@
 using Engine;
+using OpenTK.Windowing.Common;
 
 namespace GameApp{
     public static class GameLoop{
@@ -20,9 +21,10 @@ namespace GameApp{
         private static Car _car;
         public static Car CarInstance => _car;
 
-        private static bool _timerRunning;
-        private static ulong _startTime= 0;
-        private static ulong _currentTime = 0;
+        private static double _totalElapsedTime = 0f;
+        private static double _startTime = 0f;
+        private static double _currentTime = 0f;
+        public static double CurrentTime => _currentTime;
 
         private static int _maxLaps = 1;
         public static int MaxLaps => _maxLaps;
@@ -72,11 +74,17 @@ namespace GameApp{
             _countdownStarted = false;
             _currentState = LoopState.CountDown;
             _lapCount = 1;
+            _startTime = 0;
+            _currentTime = 0;
+            _totalElapsedTime = 0;
         }
 
         public static void UpdateGame(){
             //Here the car.Drive() and other game logik like start, finish of the timer will done
             //also things like update the UI
+            FrameEventArgs _event = InputProvider.GetFrameEvent();
+            _totalElapsedTime += _event.Time;
+
             if (IsState(LoopState.CountDown))
             {
                 if (!_countdownStarted)
@@ -85,15 +93,18 @@ namespace GameApp{
                     // So the car gets drawn once instead of a wide angle shot of the track
                     _car.Drive();
                 }
-                _countdownTime -= (float)InputProvider.GetFrameEvent().Time;
+                _countdownTime -= (float)_event.Time;
                 if (_countdownTime <= -1f)
                 {
                     _countdownTime = 0f;
-                    _countdownStarted = false;
+                    _countdownStarted = false;                                      
+                    _startTime = _totalElapsedTime;
+
                     ChangeState(LoopState.LapStart);
                 }
                 return;
             }
+            _currentTime = _totalElapsedTime - _startTime;   
             _car.Drive();
         }
 

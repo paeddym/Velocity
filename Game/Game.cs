@@ -79,8 +79,9 @@ namespace GameApp{
             }
             if (GameStateManager.IsState(GameStateManager.GameState.Playing)){
                 ObjectManager.DrawAll();
-                TextRenderer.RenderText("text", $"Speed: {GameLoop.CarInstance.getSpeed():F1}", 30f, 30f, 0.4f, color);
+                TextRenderer.RenderText("text", $"Speed: {GameLoop.CarInstance.getSpeed():F0}", 30f, 30f, 0.4f, color);
                 TextRenderer.RenderText("text", $"Lap: {GameLoop.LapCount}/{GameLoop.MaxLaps}", 60f, 60f, 0.4f, color);
+                TextRenderer.RenderText("text", $"Time: {FormatHelper.FormatTime(GameLoop.CurrentTime)}", 550f, 570f, 0.4f, color);
 
                 if (GameLoop.CurrentState == GameLoop.LoopState.CountDown)
                 {
@@ -92,7 +93,7 @@ namespace GameApp{
             
             if(GameStateManager.IsState(GameStateManager.GameState.Finished)){
                 ObjectManager.DrawAll();
-                TextRenderer.RenderText("text", "Finished!", 260f, 500f, 0.7f, color);
+                TextRenderer.RenderText("text", "Finished!", 270f, 500f, 0.7f, color);
                 TextRenderer.RenderText("text", "Press Esc to Quit Game", 20f, 20f, 0.5f, color);
                 TextRenderer.RenderText("text", "Press Enter for Main Menu", 130f, 300f, 0.5f, color);
             }

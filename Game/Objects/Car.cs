@@ -144,9 +144,7 @@ namespace GameApp{
 
         public float getSpeed()
         {
-            FrameEventArgs _event = InputProvider.GetFrameEvent();
-            float _deltaTime = (float)_event.Time;
-            return _speed / _deltaTime;
+            return _speed * 100000f; //Arbitrary scaling for speed
         }
 
         ~Car()
