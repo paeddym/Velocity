@@ -15,6 +15,30 @@
 
   </ItemGroup>
 
+  
+  <ItemGroup>
+    <None Remove="shaders\default.frag" />
+    <None Remove="shaders\default.vert" />
+    <None Remove="shaders\textUI.frag" />
+    <None Remove="shaders\textUI.vert" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <Content Include="shaders\default.frag">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="shaders\default.vert">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="shaders\textUI.frag">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="shaders\textUI.vert">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="OpenTK" Version="4.9.4" />
     <PackageReference Include="StbImageSharp" Version="2.30.15" />

@@ -8,16 +8,28 @@ using Engine;
 namespace GameApp{
     public class Game : GameWindow {
 
-        Camera _camera; 
-        Car _car;
+        private int _mapSelection = 1;
 
-        string[] maps = {"map3"};
+        string[] tracks = {"track1hitbox","track2hitbox","track3hitbox"};
+        private string[] _cars = {"recources/cars/Car_01.png",
+                                  "recources/cars/Car_02.png",
+                                  "recources/cars/Car_03.png",};
+
+        private string[] _tracks={"recources/tracks/Track_01.png",
+                                  "recources/tracks/Track_02.png",
+                                  "recources/tracks/Track_03.png",};
+
+        private string[] _trackHitbox={"recources/tracks/Track_01_hitbox.png",
+                                       "recources/tracks/Track_02_hitbox.png",
+                                       "recources/tracks/Track_03_hitbox.png",};
+
+        private string[] _fonts = {"recources/fonts/04B_30__.TTF"};
 
         public Game(int width, int height, string title) : 
             base(GameWindowSettings.Default, new NativeWindowSettings() { ClientSize = (width, height), Title = title }) {}
         protected override void OnLoad(){
 
-            GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            GL.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
@@ -25,33 +37,11 @@ namespace GameApp{
             //CursorState = CursorState.Grabbed;
             // Initialize the EngineCore aka default shader and texture
             // All other game initalisations need to be done after the Engine Init
-            EngineCore.Initialize("shaders/default.vert", "shaders/default.frag", 
-                    "recources/textures/container.jpg", true);
-
-            ResourceManager.LoadShader("text", "shaders/textUI.vert", "shaders/textUI.frag");
-            TextRenderer.Initialize();
-            TextRenderer.GenerateFont("default", "recources/fonts/04B_30__.TTF");
-            Shapes.Initialize();
-
-            ResourceManager.LoadTexture("car", "recources/cars/Car_01.png");
-            ResourceManager.LoadTexture("map3", "recources/tracks/Track_03.png");
-            MapBuilder.Initialize(maps);
-
-
-            //GameObject test1 = new GameObject("test");
-            //ObjectManager.AddGameObject(test1);
-            GameObject Map = new GameObject("map3", "map3");
-            Map.scale = 40f;
-            ObjectManager.AddGameObject(Map);
-
-            GameObject test = new GameObject("car", "car");
-            test.scale = 1f;
-            ObjectManager.AddGameObject(test);
-
             
-            
-            _camera = new Camera();
-            _car = new Car("car", _camera);
+            EngineCore.Initialize("recources/textures/container.jpg", true);
+            InitializeGame();
+
+
 
             base.OnLoad();
         }
@@ -59,12 +49,47 @@ namespace GameApp{
         protected override void OnRenderFrame(FrameEventArgs e){
             base.OnRenderFrame(e);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            ObjectManager.DrawAll();
-            //RenderText(string shader, string text, float x, float y, float scale, Vector3 color)
-            Vector3 color = new Vector3(0.5f, 0.8f, 0.2f);
-            TextRenderer.RenderText("text", "This is a test Text xD", 25f, 25f, 1f, color);
-            TextRenderer.RenderText("text", "This is a test Text xD", 25f, 500f, 1f, color);
 
+            Vector3 color = new Vector3(0.5f, 0.8f, 0.2f);
+
+            if (GameStateManager.IsState(GameStateManager.GameState.MainMenu)){
+                TextRenderer.RenderText("text", "Welcome to Velocity", 130f, 500f, 0.7f, color);
+                TextRenderer.RenderText("text", "be a racer", 200f, 480f, 0.4f, color);
+                TextRenderer.RenderText("text", "Press Enter to Start", 110f, 300f, 0.7f, color);
+                TextRenderer.RenderText("text", "Press Esc to Quit", 20f, 20f, 0.5f, color);
+            }
+            if (GameStateManager.IsState(GameStateManager.GameState.MapSelection)){
+                TextRenderer.RenderText("text", "Select a map to race", 130f, 500f, 0.7f, color);
+                TextRenderer.RenderText("text", "use the arrow keys", 200f, 480f, 0.4f, color);
+                if(_mapSelection == 1){
+                    TextRenderer.RenderText("text", "Track 01 (easy)<", 130f, 400f, 0.7f, color);
+                    TextRenderer.RenderText("text", "Track 02 (medium)", 130f, 300f, 0.7f, color);
+                    TextRenderer.RenderText("text", "Track 03 (hard)", 130f, 200f, 0.7f, color);
+                }
+                if(_mapSelection == 2){
+                    TextRenderer.RenderText("text", "Track 01 (easy)", 130f, 400f, 0.7f, color);
+                    TextRenderer.RenderText("text", "Track 02 (medium)<", 130f, 300f, 0.7f, color);
+                    TextRenderer.RenderText("text", "Track 03 (hard)", 130f, 200f, 0.7f, color);
+                }
+                if(_mapSelection == 3){
+                    TextRenderer.RenderText("text", "Track 01 (easy)", 130f, 400f, 0.7f, color);
+                    TextRenderer.RenderText("text", "Track 02 (medium)", 130f, 300f, 0.7f, color);
+                    TextRenderer.RenderText("text", "Track 03 (hard)<", 130f, 200f, 0.7f, color);
+                }
+            }
+            if (GameStateManager.IsState(GameStateManager.GameState.Playing)){
+                ObjectManager.DrawAll();
+            }
+
+
+            if (GameStateManager.IsState(GameStateManager.GameState.Paused)){
+                ObjectManager.DrawAll();
+                // Centered "Paused"
+                TextRenderer.RenderText("text", "Game Paused", 250f, 500f, 0.7f, color);
+                // Instructions below
+                TextRenderer.RenderText("text", "Press Esc to Resume", 130f, 300f, 0.7f, color);
+                TextRenderer.RenderText("text", "Press Enter for Main Menu", 20f, 20f, 0.5f, color);
+            }
             SwapBuffers();
         }
 
@@ -72,10 +97,48 @@ namespace GameApp{
             base.OnUpdateFrame(e);
 
             InputProvider.UpdateInputStates(KeyboardState, e, MouseState, IsFocused);
-            _car.Drive();
 
-            if (KeyboardState.IsKeyDown(Keys.Escape)){
-                Close();
+            if (GameStateManager.IsState(GameStateManager.GameState.MainMenu)){
+                if (KeyboardState.IsKeyPressed(Keys.Enter)){
+                    GameStateManager.ChangeState(GameStateManager.GameState.MapSelection);
+                }
+                if (KeyboardState.IsKeyPressed(Keys.Escape)){
+                   Close(); 
+                }
+            }
+            else if (GameStateManager.IsState(GameStateManager.GameState.MapSelection)){
+                if(KeyboardState.IsKeyPressed(Keys.Down)){
+                    _mapSelection++;
+                    if(_mapSelection > 3){
+                        _mapSelection = 1;
+                    }
+                }
+                if(KeyboardState.IsKeyPressed(Keys.Up)){
+                    _mapSelection--;
+                    if(_mapSelection < 1){
+                        _mapSelection = 3;
+                    }
+                }
+                if(KeyboardState.IsKeyPressed(Keys.Escape)){
+                    _mapSelection = 1;
+                    GameStateManager.ChangeState(GameStateManager.GameState.MainMenu);
+                }
+                if(KeyboardState.IsKeyPressed(Keys.Enter)){
+                    GameLoop.InitGameLoop($"car{_mapSelection}", $"track{_mapSelection}");
+                    GameStateManager.ChangeState(GameStateManager.GameState.Playing);
+                }
+            }
+            else if (GameStateManager.IsState(GameStateManager.GameState.Playing)){
+                GameLoop.UpdateGame();
+                if (KeyboardState.IsKeyPressed(Keys.Escape))
+                    GameStateManager.ChangeState(GameStateManager.GameState.Paused);
+            }
+
+            else if (GameStateManager.IsState(GameStateManager.GameState.Paused)){
+                if (KeyboardState.IsKeyPressed(Keys.Escape))
+                    GameStateManager.ChangeState(GameStateManager.GameState.Playing);
+                if (KeyboardState.IsKeyPressed(Keys.Enter))
+                    GameStateManager.ChangeState(GameStateManager.GameState.MainMenu);
             }
         }
 
@@ -110,6 +173,33 @@ namespace GameApp{
             GL.UseProgram(0);
         }
 
+        private void InitializeGame(){
+            //Load all cars and tracks
+            int i = 1;
+            foreach (string texture in _cars) {
+                ResourceManager.LoadTexture($"car{i}", texture);
+                i = i + 1;
+            }
+            i = 1;
+            foreach (string texture in _tracks) {
+                ResourceManager.LoadTexture($"track{i}", texture);
+                i = i + 1;
+            }
+            i = 1;
+            foreach (string texture in _trackHitbox) {
+                ResourceManager.LoadTexture($"track{i}hitbox", texture);
+                i = i + 1;
+            }
+            //Load all shaders
+            ResourceManager.LoadShader("default", "shaders/default.vert", "shaders/default.frag");
+            ResourceManager.LoadShader("text", "shaders/textUI.vert", "shaders/textUI.frag");
+
+            TextRenderer.Initialize();
+            TextRenderer.GenerateFont("default", _fonts[0]);
+
+            Shapes.Initialize();
+            MapBuilder.Initialize(tracks);
+        }
     }
 }
 

@@ -28,7 +28,7 @@ namespace Engine {
             // Initial camera Setup 
             this._shader = shader;
             _shader.Use();
-            position = new Vector3(0.0f, 0.0f, 6.0f);
+            position = new Vector3(0.0f, 0.0f, 100.0f);
             front = new Vector3(0.0f, 0.0f, -1.0f);
             up = new Vector3(0.0f, 1.0f, 0.0f);
             Matrix4 view = Matrix4.LookAt(position, position + front, up);
@@ -103,7 +103,7 @@ namespace Engine {
             needReset = true;
             _shader.Use();
 
-            position = new Vector3(x, y, 6.0f);
+            position = new Vector3(x, y, 15.0f);
 
             Matrix4 rotationZ = Matrix4.CreateRotationZ(rotZ);
 
