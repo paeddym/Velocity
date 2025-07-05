@@ -4,13 +4,13 @@ namespace GameApp{
     public static class GameLoop{
 
         public enum LoopState{
-            LapStop,
+            CountDown,
             LapStart,
             CheckPoint,
         };
         private static bool isLoopInit = false;
 
-        private static LoopState _currentState = LoopState.LapStop;
+        private static LoopState _currentState = LoopState.CountDown;
         public static LoopState CurrentState => _currentState;
 
         public static string _trackName = "none";
@@ -18,12 +18,24 @@ namespace GameApp{
 
         private static Camera _camera;
         private static Car _car;
+        public static Car CarInstance => _car;
 
         private static bool _timerRunning;
         private static ulong _startTime= 0;
         private static ulong _currentTime = 0;
 
+        private static int _maxLaps = 1;
+        public static int MaxLaps => _maxLaps;
+
+        private static int _lapCount = 1;
+        public static int LapCount => _lapCount;
+
+
         private static GameObject _map;
+
+        private static float _countdownTime = 3.0f; // Countdown from 3 seconds
+        public static float CountdownTime => _countdownTime;
+        private static bool _countdownStarted = false;
 
         public static void ChangeState(LoopState newState){
             _currentState = newState;
@@ -54,14 +66,50 @@ namespace GameApp{
             GameObject test = new GameObject(car, car);
             test.scale = 1f;
             ObjectManager.AddGameObject(test);
-
+                    
             _car = new Car(car, _camera);
+            _countdownTime = 3.0f;
+            _countdownStarted = false;
+            _currentState = LoopState.CountDown;
+            _lapCount = 1;
         }
 
         public static void UpdateGame(){
             //Here the car.Drive() and other game logik like start, finish of the timer will done
             //also things like update the UI
+            if (IsState(LoopState.CountDown))
+            {
+                if (!_countdownStarted)
+                {
+                    _countdownStarted = true;
+                    _car.Drive();
+                }
+                _countdownTime -= (float)InputProvider.GetFrameEvent().Time;
+                if (_countdownTime <= -1f)
+                {
+                    _countdownTime = 0f;
+                    _countdownStarted = false;
+                    ChangeState(LoopState.LapStart);
+                }
+                return;
+            }
             _car.Drive();
+        }
+
+        public static void HandleLapping(int id)
+        {
+            if (id == 102 && IsState(LoopState.CheckPoint) && _lapCount <= _maxLaps)
+            {
+                _lapCount++;
+                ChangeState(LoopState.LapStart);
+            } else if (id == 127) {
+                ChangeState(LoopState.CheckPoint);
+            }
+
+            if (_lapCount > _maxLaps)
+            {
+                GameStateManager.ChangeState(GameStateManager.GameState.Finished);
+            }
         }
     }
 }

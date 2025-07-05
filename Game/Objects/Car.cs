@@ -131,13 +131,23 @@ namespace GameApp{
                     if(hit[2] == 102) {
                         _dummyStart = true;
                         Console.WriteLine("Car crosses start/finish line");
+                        GameLoop.HandleLapping(102);
+                        
                     }
                     if(hit[2] == 127) {
                         Console.WriteLine("Car crosses checkpoint line");
+                        GameLoop.HandleLapping(127);                  
                     }
                 }
             }
             return empty;
+        }
+
+        public float getSpeed()
+        {
+            FrameEventArgs _event = InputProvider.GetFrameEvent();
+            float _deltaTime = (float)_event.Time;
+            return _speed / _deltaTime;
         }
 
         ~Car()
