@@ -24,8 +24,12 @@ namespace GameApp{
         private static ulong _startTime= 0;
         private static ulong _currentTime = 0;
 
-        public static int maxLaps = 1;
-        public static int lapCount = 1;
+        private static int _maxLaps = 1;
+        public static int MaxLaps => _maxLaps;
+
+        private static int _lapCount = 1;
+        public static int LapCount => _lapCount;
+
 
         private static GameObject _map;
 
@@ -62,13 +66,12 @@ namespace GameApp{
             GameObject test = new GameObject(car, car);
             test.scale = 1f;
             ObjectManager.AddGameObject(test);
-
-            lapCount = 1;
-
+                    
             _car = new Car(car, _camera);
             _countdownTime = 3.0f;
             _countdownStarted = false;
             _currentState = LoopState.CountDown;
+            _lapCount = 1;
         }
 
         public static void UpdateGame(){
@@ -95,15 +98,15 @@ namespace GameApp{
 
         public static void HandleLapping(int id)
         {
-            if (id == 102 && IsState(LoopState.CheckPoint) && lapCount <= maxLaps)
+            if (id == 102 && IsState(LoopState.CheckPoint) && _lapCount <= _maxLaps)
             {
-                lapCount++;
+                _lapCount++;
                 ChangeState(LoopState.LapStart);
             } else if (id == 127) {
                 ChangeState(LoopState.CheckPoint);
             }
 
-            if (lapCount > maxLaps)
+            if (_lapCount > _maxLaps)
             {
                 GameStateManager.ChangeState(GameStateManager.GameState.Finished);
             }

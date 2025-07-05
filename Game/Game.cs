@@ -80,7 +80,7 @@ namespace GameApp{
             if (GameStateManager.IsState(GameStateManager.GameState.Playing)){
                 ObjectManager.DrawAll();
                 TextRenderer.RenderText("text", $"Speed: {GameLoop.CarInstance.getSpeed():F1}", 30f, 30f, 0.4f, color);
-                TextRenderer.RenderText("text", $"Lap: {GameLoop.lapCount}/{GameLoop.maxLaps}", 60f, 60f, 0.4f, color);
+                TextRenderer.RenderText("text", $"Lap: {GameLoop.LapCount}/{GameLoop.MaxLaps}", 60f, 60f, 0.4f, color);
 
                 if (GameLoop.CurrentState == GameLoop.LoopState.CountDown)
                 {
