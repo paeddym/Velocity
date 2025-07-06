@@ -1,5 +1,6 @@
 using Engine;
 using OpenTK.Windowing.Common;
+using System.Drawing;
 
 namespace GameApp{
     public static class GameLoop{
@@ -32,6 +33,17 @@ namespace GameApp{
         public static double BestLapTime => _bestLapTime;
         private static double _trackRecord = double.MaxValue;
         public static double TrackRecord => _trackRecord;
+
+        private static double _previousSplitToCheckPoint = 0f;
+        private static double _currentSplitToCheckpoint = 0f;
+        private static double _previousSplitToStart = 0f;
+        private static double _currentSplitToStart = 0f;
+        private static double _previousSplitToStartStart = 0f;  // At which point in time the checkpoint was reached last
+        private static double _splitDifference = 0f;
+        public static double SplitDifference => _splitDifference;
+        public static bool ShowSplits = false;
+        private static double _showSplitsDuration = 3f;
+        public static double ShowSplitsTimer = _showSplitsDuration;  // Show split information for 3 seconds after crossing a checkpoint
 
         private static int _maxLaps = 3;
         public static int MaxLaps => _maxLaps;
@@ -86,6 +98,14 @@ namespace GameApp{
             _currentLapTime = 0;
             _previousLapStart = 0;
             _bestLapTime = double.MaxValue;
+            _currentSplitToCheckpoint = 0f;
+            _previousSplitToCheckPoint = 0f;
+            _currentSplitToStart = 0f;
+            _previousSplitToStart = 0f;
+            _previousSplitToStartStart = 0f;
+            _splitDifference = 0f;
+            ShowSplits = false;
+            ShowSplitsTimer = _showSplitsDuration;
 
             // Load best lap time from file if available
             var fileBest = LapTimeStorage.LoadBestLapTime(_trackName);
@@ -133,14 +153,32 @@ namespace GameApp{
         {
             if (id == 102 && IsState(LoopState.CheckPoint) && _lapCount <= _maxLaps)
             {
+
+                _currentSplitToStart = _totalElapsedTime - _previousSplitToStartStart;
+                _splitDifference = _currentSplitToStart - _previousSplitToStart;
+                _previousSplitToStart = _currentSplitToStart;
+                _previousLapStart = _totalElapsedTime;
                 _lapCount++;
+                ShowSplitsTimer = _showSplitsDuration;
+
                 if (_currentLapTime < _bestLapTime)
                 {
                     _bestLapTime = _currentLapTime;                   
                 }
-                _previousLapStart = _totalElapsedTime;
+                
                 ChangeState(LoopState.LapStart);
             } else if (id == 127) {
+                if (!IsState(LoopState.CheckPoint)){                    
+                    _currentSplitToCheckpoint = _totalElapsedTime - _previousLapStart;
+                    _splitDifference = _currentSplitToCheckpoint - _previousSplitToCheckPoint;
+                    _previousSplitToCheckPoint = _currentSplitToCheckpoint;
+                    _previousSplitToStartStart = _totalElapsedTime;
+                    ShowSplitsTimer = _showSplitsDuration;
+                }
+                if (_lapCount > 1)
+                {
+                    ShowSplits = true;
+                }
                 ChangeState(LoopState.CheckPoint);
             }
 
