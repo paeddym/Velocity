@@ -86,6 +86,7 @@ namespace GameApp{
                 TextRenderer.RenderText("text", $"Lap: {GameLoop.LapCount}/{GameLoop.MaxLaps}", 30f, 60f, 0.4f, color);
                 TextRenderer.RenderText("text", $"Time: {FormatHelper.FormatTime(GameLoop.CurrentTime)}", 550f, 570f, 0.4f, color);
                 TextRenderer.RenderText("text", GameLoop.TrackRecord < double.MaxValue ? $"Record: {FormatHelper.FormatTime(GameLoop.TrackRecord)}" : "", 30f, 570f, 0.4f, color);
+                TextRenderer.RenderText("text", GameLoop.ShowSplits ? $"Split: {FormatHelper.FormatSplitTime(GameLoop.SplitDifference)}" : "", 30f, 540f, 0.4f, color);
                 TextRenderer.RenderText("text", GameLoop.BestLapTime < double.MaxValue ? $"Best: {FormatHelper.FormatTime(GameLoop.BestLapTime)}" : "", 550f, 540f, 0.4f, color);
 
                 if (GameLoop.CurrentState == GameLoop.LoopState.CountDown)
@@ -99,7 +100,7 @@ namespace GameApp{
             if(GameStateManager.IsState(GameStateManager.GameState.Finished)){
                 ObjectManager.DrawAll();
                 TextRenderer.RenderText("text", "Finished!", 280f, 500f, 0.7f, color);
-                TextRenderer.RenderText("text", GameLoop.CurrentTime == GameLoop.TrackRecord ? "New track record!" : "", 140f, 400f, 0.7f, color);
+                TextRenderer.RenderText("text", GameLoop.CurrentTime == GameLoop.TrackRecord ? "New track record!" : "", 160f, 400f, 0.7f, color);
                 TextRenderer.RenderText("text", $"Finished in: {FormatHelper.FormatTime(GameLoop.CurrentTime)}", 150f, 340f, 0.7f, color);
                 TextRenderer.RenderText("text", $"Best Lap: {FormatHelper.FormatTime(GameLoop.BestLapTime)}", 170f, 300f, 0.7f, color);
                 TextRenderer.RenderText("text", "Press Esc to Quit Game", 20f, 20f, 0.3f, color);
