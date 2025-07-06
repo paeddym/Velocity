@@ -42,6 +42,8 @@ namespace GameApp{
         private static double _splitDifference = 0f;
         public static double SplitDifference => _splitDifference;
         public static bool ShowSplits = false;
+        private static double _showSplitsDuration = 3f;
+        public static double ShowSplitsTimer = _showSplitsDuration;  // Show split information for 3 seconds after crossing a checkpoint
 
         private static int _maxLaps = 3;
         public static int MaxLaps => _maxLaps;
@@ -103,6 +105,7 @@ namespace GameApp{
             _previousSplitToStartStart = 0f;
             _splitDifference = 0f;
             ShowSplits = false;
+            ShowSplitsTimer = _showSplitsDuration;
 
             // Load best lap time from file if available
             var fileBest = LapTimeStorage.LoadBestLapTime(_trackName);
@@ -156,6 +159,7 @@ namespace GameApp{
                 _previousSplitToStart = _currentSplitToStart;
                 _previousLapStart = _totalElapsedTime;
                 _lapCount++;
+                ShowSplitsTimer = _showSplitsDuration;
 
                 if (_currentLapTime < _bestLapTime)
                 {
@@ -168,8 +172,8 @@ namespace GameApp{
                     _currentSplitToCheckpoint = _totalElapsedTime - _previousLapStart;
                     _splitDifference = _currentSplitToCheckpoint - _previousSplitToCheckPoint;
                     _previousSplitToCheckPoint = _currentSplitToCheckpoint;
-
                     _previousSplitToStartStart = _totalElapsedTime;
+                    ShowSplitsTimer = _showSplitsDuration;
                 }
                 if (_lapCount > 1)
                 {

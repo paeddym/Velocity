@@ -85,9 +85,12 @@ namespace GameApp{
                 TextRenderer.RenderText("text", $"Speed: {GameLoop.CarInstance.getSpeed():F0}", 30f, 30f, 0.4f, color);
                 TextRenderer.RenderText("text", $"Lap: {GameLoop.LapCount}/{GameLoop.MaxLaps}", 30f, 60f, 0.4f, color);
                 TextRenderer.RenderText("text", $"Time: {FormatHelper.FormatTime(GameLoop.CurrentTime)}", 550f, 570f, 0.4f, color);
-                TextRenderer.RenderText("text", GameLoop.TrackRecord < double.MaxValue ? $"Record: {FormatHelper.FormatTime(GameLoop.TrackRecord)}" : "", 30f, 570f, 0.4f, color);
-                TextRenderer.RenderText("text", GameLoop.ShowSplits ? $"Split: {FormatHelper.FormatSplitTime(GameLoop.SplitDifference)}" : "", 30f, 540f, 0.4f, color);
+                TextRenderer.RenderText("text", GameLoop.TrackRecord < double.MaxValue ? $"Record: {FormatHelper.FormatTime(GameLoop.TrackRecord)}" : "", 30f, 570f, 0.4f, color);                
                 TextRenderer.RenderText("text", GameLoop.BestLapTime < double.MaxValue ? $"Best: {FormatHelper.FormatTime(GameLoop.BestLapTime)}" : "", 550f, 540f, 0.4f, color);
+                if(GameLoop.ShowSplits && GameLoop.ShowSplitsTimer > 0){
+                    TextRenderer.RenderText("text", $"{FormatHelper.FormatSplitTime(GameLoop.SplitDifference)}s", 330f, 540f, 0.4f, GameLoop.SplitDifference < 0 ? color : new Vector3(0.8f, 0.2f, 0.2f));
+                    GameLoop.ShowSplitsTimer -= e.Time;
+                }
 
                 if (GameLoop.CurrentState == GameLoop.LoopState.CountDown)
                 {
