@@ -4,13 +4,14 @@ namespace GameApp{
     public static class GameLoop{
 
         public enum LoopState{
-            LapStop,
             LapStart,
+            LapRunning,
+            LapStop,
             CheckPoint,
         };
         private static bool isLoopInit = false;
 
-        private static LoopState _currentState = LoopState.LapStop;
+        private static LoopState _currentState = LoopState.LapStart;
         public static LoopState CurrentState => _currentState;
 
         public static string _trackName = "none";
@@ -20,8 +21,8 @@ namespace GameApp{
         private static Car _car;
 
         private static bool _timerRunning;
-        private static ulong _startTime= 0;
-        private static ulong _currentTime = 0;
+        private static ulong _finishTime = 0;
+        private static ulong _checkpointTime = 0;
 
         private static GameObject _map;
 
@@ -37,12 +38,12 @@ namespace GameApp{
             if(isLoopInit == true){
                ObjectManager.DeleteGameObject(_carName);
                ObjectManager.DeleteGameObject(_trackName);
-               
             }
             else{
                 _camera = new Camera();
             }
             isLoopInit = true;
+            _currentState = LoopState.LapStart;
 
             _carName = car;
             _trackName = track;

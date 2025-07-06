@@ -128,16 +128,54 @@ namespace GameApp{
                     if (hit[2] == 0) {
                         this._speed = (this._speed*(-1));
                     }
-                    if(hit[2] == 102) {
-                        _dummyStart = true;
-                        Console.WriteLine("Car crosses start/finish line");
+                    if(hit[2] == 102 && GameLoop.IsState(GameLoop.LoopState.LapStart) && checkCarAngleStartFinish()) {
+                        GameLoop.ChangeState(GameLoop.LoopState.LapRunning);
+                        Console.WriteLine("Car crosses start line");
                     }
-                    if(hit[2] == 127) {
+                    if(hit[2] == 127 && GameLoop.IsState(GameLoop.LoopState.LapRunning) && checkCarAngleCheckpoint()) {
+                        GameLoop.ChangeState(GameLoop.LoopState.CheckPoint);
                         Console.WriteLine("Car crosses checkpoint line");
+                    }
+                    if(hit[2] == 102 && GameLoop.IsState(GameLoop.LoopState.CheckPoint) && checkCarAngleStartFinish()) {
+                        GameLoop.ChangeState(GameLoop.LoopState.LapStop);
+                        Console.WriteLine("Car crosses finish line");
                     }
                 }
             }
             return empty;
+        }
+
+        private bool checkCarAngleStartFinish() {
+            float rotation = ConvertRadiansToDegrees(_car.objectPos.W);
+            Console.WriteLine($"Car Angle: {rotation} \nCar Speed: {_speed}");
+            if ((rotation < 90&&rotation >=0) || (rotation > 270&&rotation<=360) && _speed > 0){
+                Console.WriteLine("[START / FINISH]Car right direction forward");
+                return true;
+            } else if (rotation > 90 && rotation < 270 && _speed < 0){
+               Console.WriteLine("[START / FINISH]Car right direction backwards");
+               return true;
+            }
+            Console.WriteLine("[START / FINISH]car wrong direction");
+            return false;
+        }
+        private bool checkCarAngleCheckpoint() {
+            float rotation = ConvertRadiansToDegrees(_car.objectPos.W);
+            if ((rotation < 90&&rotation >=0) || (rotation > 270&&rotation<=360) && _speed < 0){
+                Console.WriteLine("[CHECKPOINT]Car right direction forward");
+                return true;
+            } else if (rotation > 90 && rotation < 270 && _speed > 0){
+               Console.WriteLine("[CHECKPOINT]Car right direction backwards");
+               return true;
+            }
+            Console.WriteLine("[CHECKPOINT]car wrong direction");
+            return false;
+        }
+
+        private float ConvertRadiansToDegrees(float radians){
+            float degrees = (180f / (float)Math.PI) * radians;
+            degrees = degrees % 360f;
+            if (degrees < 0) degrees += 360f;
+            return degrees;
         }
 
         ~Car()

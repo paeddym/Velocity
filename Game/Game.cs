@@ -79,16 +79,21 @@ namespace GameApp{
             }
             if (GameStateManager.IsState(GameStateManager.GameState.Playing)){
                 ObjectManager.DrawAll();
+                TextRenderer.RenderText("text", GameTimer.GetFormattedTime(), 100f, 200f, 0.7f, color);
             }
-
 
             if (GameStateManager.IsState(GameStateManager.GameState.Paused)){
                 ObjectManager.DrawAll();
+                TextRenderer.RenderText("text", GameTimer.GetFormattedTime(), 100f, 200f, 0.7f, color);
                 // Centered "Paused"
                 TextRenderer.RenderText("text", "Game Paused", 250f, 500f, 0.7f, color);
                 // Instructions below
                 TextRenderer.RenderText("text", "Press Esc to Resume", 130f, 300f, 0.7f, color);
                 TextRenderer.RenderText("text", "Press Enter for Main Menu", 20f, 20f, 0.5f, color);
+            }
+
+            if (GameStateManager.IsState(GameStateManager.GameState.FinishScreen)) {
+                TextRenderer.RenderText("text", "You finished the Game !!!", 75f, 500f, 0.7f, color);
             }
             SwapBuffers();
         }
@@ -129,16 +134,28 @@ namespace GameApp{
                 }
             }
             else if (GameStateManager.IsState(GameStateManager.GameState.Playing)){
+                GameTimer.Start();
                 GameLoop.UpdateGame();
-                if (KeyboardState.IsKeyPressed(Keys.Escape))
+                if (KeyboardState.IsKeyPressed(Keys.Escape)){
+                    GameTimer.Pause();
                     GameStateManager.ChangeState(GameStateManager.GameState.Paused);
+                }
             }
-
             else if (GameStateManager.IsState(GameStateManager.GameState.Paused)){
-                if (KeyboardState.IsKeyPressed(Keys.Escape))
+                if (KeyboardState.IsKeyPressed(Keys.Escape)){
+                    GameTimer.Resume();
                     GameStateManager.ChangeState(GameStateManager.GameState.Playing);
-                if (KeyboardState.IsKeyPressed(Keys.Enter))
+                }
+                if (KeyboardState.IsKeyPressed(Keys.Enter)) {
+                    GameTimer.Pause();
+                    GameTimer.Reset(); 
                     GameStateManager.ChangeState(GameStateManager.GameState.MainMenu);
+                }
+            }
+            else if (GameStateManager.IsState(GameStateManager.GameState.FinishScreen)){
+                if (KeyboardState.IsKeyPressed(Keys.Enter)){
+                    GameStateManager.ChangeState(GameStateManager.GameState.MainMenu);
+                }
             }
         }
 
