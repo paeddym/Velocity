@@ -7,19 +7,13 @@ A racing game written in C# using OpenTK
 
 # TODO
 ## Compulsory
-- Implement collisions or slowdown effect when leaving the track
-- Add a round timer and round counter
-- Add checkpoints on map to make a round count
+- Make map prettier
 - Add particles
-- Improve menus
-- Improve game state logic
 
 ## Optional
 - AI enemies
-- Multiple racetracks
 - Items system
 - Dynamic events on racetrack
-- System to handle best times
 
 ### Setup on Windows
 - Install Visual Studio 2022 and .NET 8 Framework

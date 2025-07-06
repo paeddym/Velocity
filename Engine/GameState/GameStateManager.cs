@@ -5,7 +5,8 @@ namespace Engine{
             MainMenu,
             Playing,
             Paused,
-            MapSelection 
+            MapSelection,
+            Finished
         }
 
         private static GameState _currentState = GameState.MainMenu;
