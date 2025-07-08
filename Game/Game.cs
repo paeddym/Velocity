@@ -225,6 +225,9 @@ namespace GameApp{
             //Load all shaders
             ResourceManager.LoadShader("default", "shaders/default.vert", "shaders/default.frag");
             ResourceManager.LoadShader("text", "shaders/textUI.vert", "shaders/textUI.frag");
+            ResourceManager.LoadShader("particle", "shaders/particle.vert", "shaders/particle.frag");
+
+            ResourceManager.LoadTexture("carexaust", "recources/particles/Dustcloud_small.png");
 
             TextRenderer.Initialize();
             TextRenderer.GenerateFont("default", _fonts[0]);

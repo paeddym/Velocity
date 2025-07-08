@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# laptime files so game starts empty after fresh pull
+laptime*
+
 # User-specific files
 *.rsuser
 *.suo

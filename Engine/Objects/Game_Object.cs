@@ -69,6 +69,10 @@ namespace Engine {
             GL.DrawElements(PrimitiveType.Triangles, Shapes.GetQuadIndices(), DrawElementsType.UnsignedInt, 0);
         }
 
+        public void Draw(Action draw){
+            draw();
+        }
+
         ~GameObject(){
             if(this.VertexBufferObject != -1) {
                 GL.DeleteVertexArray(this.VertexArrayObject);
