@@ -7,7 +7,7 @@ namespace Engine {
     public class Camera {
 // WARNING: The Camera currently works only with the default shader
         // Camera
-        Vector3 position;
+        public Vector3 position;
         Vector3 cameraTarget;
         Vector3 cameraDirection;
         Vector3 up;

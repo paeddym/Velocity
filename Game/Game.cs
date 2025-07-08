@@ -23,6 +23,8 @@ namespace GameApp{
                                        "recources/tracks/Track_02_hitbox.png",
                                        "recources/tracks/Track_03_hitbox.png",};
 
+        private string[] _animations = {"recources/spritesheets/SmokeEffect.png"};
+
         private string[] _fonts = {"recources/fonts/04B_30__.TTF"};
 
         public Game(int width, int height, string title) : 
@@ -51,14 +53,14 @@ namespace GameApp{
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             Vector3 color = new Vector3(0.5f, 0.8f, 0.2f);
-
+       
             if (GameStateManager.IsState(GameStateManager.GameState.MainMenu)){
                 TextRenderer.RenderText("text", "Welcome to Velocity", 130f, 500f, 0.7f, color);
                 TextRenderer.RenderText("text", "be a racer", 200f, 480f, 0.4f, color);
                 TextRenderer.RenderText("text", "Press Enter to Start", 110f, 300f, 0.7f, color);
                 TextRenderer.RenderText("text", "Press Esc to Quit", 20f, 20f, 0.5f, color);
             }
-            if (GameStateManager.IsState(GameStateManager.GameState.MapSelection)){
+            if (GameStateManager.IsState(GameStateManager.GameState.MapSelection)){                
                 TextRenderer.RenderText("text", "Select a map to race", 130f, 500f, 0.7f, color);
                 TextRenderer.RenderText("text", "use the arrow keys", 200f, 480f, 0.4f, color);
                 if(_mapSelection == 1){
@@ -82,6 +84,35 @@ namespace GameApp{
             }
             if (GameStateManager.IsState(GameStateManager.GameState.Playing)){
                 ObjectManager.DrawAll();
+
+                var car = GameLoop.CarInstance;
+                if (car.CollisionAnimActive)
+                {
+                    float zoom = 20f; // Use your game's zoom factor
+                    var camera = GameLoop.CameraInstance;
+                    // Get camera rotation (rotZ) from car's GameObject
+                    float rotZ = car.GetGameObject().objectPos.W;
+                    // Animation world position relative to camera
+                    var rel = car.CollisionAnimPosition - new Vector2(camera.position.X, camera.position.Y);
+                    // Rotate by -rotZ
+                    float cos = (float)Math.Cos(-rotZ);
+                    float sin = (float)Math.Sin(-rotZ);
+                    float rx = rel.X * cos - rel.Y * sin;
+                    float ry = rel.X * sin + rel.Y * cos;
+                    // Convert to screen coordinates
+                    float screenX = rx * zoom + 400;
+                    float screenY = ry * zoom + 300;
+                    var animScreenPos = new Vector2(screenX, screenY);
+
+                    AnimationRenderer.Draw(
+                        ResourceManager.GetTexture("animation1"),
+                        "animation",
+                        GameLoop.CurrentTime - car.CollisionAnimStartTime,
+                        car.CollisionAnimDuration,
+                        new Box2(animScreenPos - new Vector2(32, 32), animScreenPos + new Vector2(32, 32)),
+                        11, 1
+                    );
+                }
                 TextRenderer.RenderText("text", $"Speed: {GameLoop.CarInstance.getSpeed():F0}", 30f, 30f, 0.4f, color);
                 TextRenderer.RenderText("text", $"Lap: {GameLoop.LapCount}/{GameLoop.MaxLaps}", 30f, 60f, 0.4f, color);
                 TextRenderer.RenderText("text", $"Time: {FormatHelper.FormatTime(GameLoop.CurrentTime)}", 550f, 570f, 0.4f, color);
@@ -99,7 +130,7 @@ namespace GameApp{
                     TextRenderer.RenderText("text", display, 380f, 300f, 2.0f, color);
                 }
             }
-            
+
             if(GameStateManager.IsState(GameStateManager.GameState.Finished)){
                 ObjectManager.DrawAll();
                 TextRenderer.RenderText("text", "Finished!", 280f, 500f, 0.7f, color);
@@ -222,9 +253,18 @@ namespace GameApp{
                 ResourceManager.LoadTexture($"track{i}hitbox", texture);
                 i = i + 1;
             }
+            i = 1;
+            //Load animation spritesheets
+            foreach (string animation in _animations) {
+                ResourceManager.LoadTexture($"animation{i}", animation);
+                i = i + 1;
+            }
             //Load all shaders
             ResourceManager.LoadShader("default", "shaders/default.vert", "shaders/default.frag");
             ResourceManager.LoadShader("text", "shaders/textUI.vert", "shaders/textUI.frag");
+            ResourceManager.LoadShader("animation", "shaders/animation.vert", "shaders/animation.frag");
+
+            AnimationRenderer.Initialize();
 
             TextRenderer.Initialize();
             TextRenderer.GenerateFont("default", _fonts[0]);
