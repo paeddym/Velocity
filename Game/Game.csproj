@@ -17,6 +17,8 @@
 
   
   <ItemGroup>
+    <None Remove="shaders\animation.frag" />
+    <None Remove="shaders\animation.vert" />
     <None Remove="shaders\default.frag" />
     <None Remove="shaders\default.vert" />
     <None Remove="shaders\textUI.frag" />
@@ -25,6 +27,9 @@
 
   
   <ItemGroup>
+    <Content Include="shaders\animation.frag">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="shaders\default.frag">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -46,6 +51,18 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="shaders\animation.vert">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="recources\spritesheets\SmokeEffect.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
