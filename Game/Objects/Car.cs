@@ -15,6 +15,16 @@ namespace GameApp{
         Vector2[] localOffsets;
         List<Vector2> hitboxPoints;
 
+        private bool _collisionAnimActive = false;
+        private double _collisionAnimStartTime = 0;
+        private Vector2 _collisionAnimPosition = Vector2.Zero;
+        private const double _collisionAnimDuration = 0.5;
+
+        public bool CollisionAnimActive => _collisionAnimActive;
+        public double CollisionAnimStartTime => _collisionAnimStartTime;
+        public Vector2 CollisionAnimPosition => _collisionAnimPosition;
+        public double CollisionAnimDuration => _collisionAnimDuration;
+
         public Car(string name, Camera camera) {
             this._name = name;
             this._camera = camera;
@@ -112,6 +122,12 @@ namespace GameApp{
             _car.objectPos.X = _car.objectPos.X + _car.front.X * _speed;
             _car.objectPos.Y = _car.objectPos.Y + _car.front.Y * _speed;
 
+            // Deactivate collision animation if duration has passed
+            if (_collisionAnimActive && (GameLoop.CurrentTime - _collisionAnimStartTime) > _collisionAnimDuration)
+            {
+                _collisionAnimActive = false;
+            }
+
             _camera.UseLockCam(_car.objectPos.X, _car.objectPos.Y, _car.objectPos.W);
         }
 
@@ -127,6 +143,9 @@ namespace GameApp{
                 if (hit[2] != -1) {
                     if (hit[2] == 0) {
                         this._speed = (this._speed*(-1));
+                        _collisionAnimActive = true;
+                        _collisionAnimStartTime = GameLoop.CurrentTime;
+                        _collisionAnimPosition = point;
                     }
                     if(hit[2] == 102) {
                         _dummyStart = true;

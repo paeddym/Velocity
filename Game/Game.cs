@@ -84,6 +84,24 @@ namespace GameApp{
             }
             if (GameStateManager.IsState(GameStateManager.GameState.Playing)){
                 ObjectManager.DrawAll();
+
+                var car = GameLoop.CarInstance;
+                if (car.CollisionAnimActive)
+                {                    
+                    float zoom = 20f; // Use your game's zoom factor
+                    float screenX = (car.CollisionAnimPosition.X - GameLoop.CameraInstance.position.X) * zoom + 400;
+                    float screenY = (car.CollisionAnimPosition.Y - GameLoop.CameraInstance.position.Y) * zoom + 300;
+                    var animScreenPos = new Vector2(screenX, screenY);
+
+                    AnimationRenderer.Draw(
+                        ResourceManager.GetTexture("animation1"),
+                        "animation",
+                        GameLoop.CurrentTime - car.CollisionAnimStartTime,
+                        car.CollisionAnimDuration,
+                        new Box2(animScreenPos - new Vector2(32, 32), animScreenPos + new Vector2(32, 32)),
+                        11, 1
+                    );
+                }
                 TextRenderer.RenderText("text", $"Speed: {GameLoop.CarInstance.getSpeed():F0}", 30f, 30f, 0.4f, color);
                 TextRenderer.RenderText("text", $"Lap: {GameLoop.LapCount}/{GameLoop.MaxLaps}", 30f, 60f, 0.4f, color);
                 TextRenderer.RenderText("text", $"Time: {FormatHelper.FormatTime(GameLoop.CurrentTime)}", 550f, 570f, 0.4f, color);
@@ -100,8 +118,6 @@ namespace GameApp{
                     string display = countdownValue > 0 ? countdownValue.ToString() : "GO!";
                     TextRenderer.RenderText("text", display, 380f, 300f, 2.0f, color);
                 }
-
-                AnimationRenderer.Draw(ResourceManager.GetTexture("animation1"), "animation", GameLoop.CurrentTime, 0.5f, new Box2(new Vector2(100f, 100f), new Vector2(200f, 200f)), 11, 1);
             }
 
             if(GameStateManager.IsState(GameStateManager.GameState.Finished)){

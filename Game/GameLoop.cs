@@ -19,6 +19,7 @@ namespace GameApp{
         private static string _carName = "none";
 
         private static Camera _camera;
+        public static Camera CameraInstance => _camera;
         private static Car _car;
         public static Car CarInstance => _car;
 
