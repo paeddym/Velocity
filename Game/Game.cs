@@ -87,10 +87,21 @@ namespace GameApp{
 
                 var car = GameLoop.CarInstance;
                 if (car.CollisionAnimActive)
-                {                    
+                {
                     float zoom = 20f; // Use your game's zoom factor
-                    float screenX = (car.CollisionAnimPosition.X - GameLoop.CameraInstance.position.X) * zoom + 400;
-                    float screenY = (car.CollisionAnimPosition.Y - GameLoop.CameraInstance.position.Y) * zoom + 300;
+                    var camera = GameLoop.CameraInstance;
+                    // Get camera rotation (rotZ) from car's GameObject
+                    float rotZ = car.GetGameObject().objectPos.W;
+                    // Animation world position relative to camera
+                    var rel = car.CollisionAnimPosition - new Vector2(camera.position.X, camera.position.Y);
+                    // Rotate by -rotZ
+                    float cos = (float)Math.Cos(-rotZ);
+                    float sin = (float)Math.Sin(-rotZ);
+                    float rx = rel.X * cos - rel.Y * sin;
+                    float ry = rel.X * sin + rel.Y * cos;
+                    // Convert to screen coordinates
+                    float screenX = rx * zoom + 400;
+                    float screenY = ry * zoom + 300;
                     var animScreenPos = new Vector2(screenX, screenY);
 
                     AnimationRenderer.Draw(

@@ -166,6 +166,8 @@ namespace GameApp{
             return _speed * 100000f; //Arbitrary scaling to make speed more legible
         }
 
+        public GameObject GetGameObject() => _car;
+
         ~Car()
         {
 
