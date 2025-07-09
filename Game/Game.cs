@@ -81,7 +81,8 @@ namespace GameApp{
                 }
             }
             if (GameStateManager.IsState(GameStateManager.GameState.Playing)){
-                ObjectManager.DrawAll();
+                //ObjectManager.DrawAll();
+                testFuck.mm.Draw();
                 TextRenderer.RenderText("text", $"Speed: {GameLoop.CarInstance.getSpeed():F0}", 30f, 30f, 0.4f, color);
                 TextRenderer.RenderText("text", $"Lap: {GameLoop.LapCount}/{GameLoop.MaxLaps}", 30f, 60f, 0.4f, color);
                 TextRenderer.RenderText("text", $"Time: {FormatHelper.FormatTime(GameLoop.CurrentTime)}", 550f, 570f, 0.4f, color);
@@ -101,7 +102,7 @@ namespace GameApp{
             }
             
             if(GameStateManager.IsState(GameStateManager.GameState.Finished)){
-                ObjectManager.DrawAll();
+                //ObjectManager.DrawAll();
                 TextRenderer.RenderText("text", "Finished!", 280f, 500f, 0.7f, color);
                 TextRenderer.RenderText("text", GameLoop.CurrentTime == GameLoop.TrackRecord ? "New track record!" : "", 160f, 400f, 0.7f, color);
                 TextRenderer.RenderText("text", $"Finished in: {FormatHelper.FormatTime(GameLoop.CurrentTime)}", 150f, 340f, 0.7f, color);
@@ -111,7 +112,7 @@ namespace GameApp{
             }
 
             if (GameStateManager.IsState(GameStateManager.GameState.Paused)){
-                ObjectManager.DrawAll();
+                //ObjectManager.DrawAll();
                 TextRenderer.RenderText("text", "Game Paused", 250f, 500f, 0.7f, color);
                 TextRenderer.RenderText("text", "Press Esc to Resume", 130f, 300f, 0.7f, color);
                 TextRenderer.RenderText("text", "Press Enter for Main Menu", 20f, 20f, 0.5f, color);

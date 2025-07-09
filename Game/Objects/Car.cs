@@ -12,6 +12,8 @@ namespace GameApp{
         private GameObject _car;
         private bool _dummyStart = false;
 
+        //private ParticleManager _particles;
+
         Vector2[] localOffsets;
         List<Vector2> hitboxPoints;
 
@@ -21,6 +23,8 @@ namespace GameApp{
             this._car = ObjectManager.GetGameObject(this._name);
             this._car.objectPos.X = -15.5f;
             this._car.objectPos.Y = 0.3f;
+    
+            //this._particles = new ParticleManager("carexaust", "particle", 100);
         }
 
         public void Drive() {
@@ -113,6 +117,12 @@ namespace GameApp{
             _car.objectPos.Y = _car.objectPos.Y + _car.front.Y * _speed;
 
             _camera.UseLockCam(_car.objectPos.X, _car.objectPos.Y, _car.objectPos.W);
+
+            Console.WriteLine($"Car Pos: {_car.objectPos}");
+
+            //_particles.Update(_car, 1);
+            //_particles.Draw();
+            testFuck.mm.Update(_car, 3);
         }
 
         public Vector2 GetSize(){

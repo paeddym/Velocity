@@ -1,5 +1,6 @@
 using OpenTK.Windowing.Common;
 using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 
 namespace Engine {
     public class ParticleManager {
@@ -43,10 +44,38 @@ namespace Engine {
             }
         }
 
+        public void Draw() {
+            this._shader.Use();
+
+            Shapes.BindQuad();
+
+            //Console.WriteLine("[PARTICLE]: Draw particle");
+            Matrix4 projection = Matrix4.CreateOrthographicOffCenter(0.0f, 800.0f, 0.0f, 600.0f, -1.0f, 1.0f);
+            int projectionLocation =  GL.GetUniformLocation(_shader.Handle, "projection");
+            GL.UniformMatrix4(projectionLocation, false, ref projection);
+
+            int offset = GL.GetUniformLocation(_shader.Handle, "model");
+
+            foreach (Particle p in _particles) {
+                if (p.life > 0.0f) {
+                    GL.ActiveTexture(TextureUnit.Texture0);
+                    this._texture.Use();
+
+                    int modelLocation = GL.GetUniformLocation(_shader.Handle, "model");
+                    Matrix4 model = Matrix4.CreateScale(p.scale) * 
+                        Matrix4.CreateTranslation(p.particlePos.X, p.particlePos.Y, 0.0f);
+
+                    GL.UniformMatrix4(modelLocation, false, ref model);
+
+                    GL.DrawElements(PrimitiveType.Triangles, Shapes.GetQuadIndices(), DrawElementsType.UnsignedInt, 0);
+                }
+            }
+        }
+
         public void Update(GameObject gameObject, int newParticles) {
             FrameEventArgs _event = InputProvider.GetFrameEvent();
             float _deltaTime = (float)_event.Time;
-
+            //Console.WriteLine("[PARTICLE]: Update Particle");
             for (int i = 0; i < newParticles; i++) {
                 int unusedParticle = firstUnusedParticle();
                 respawnParticle(_particles[unusedParticle], gameObject);
@@ -79,9 +108,16 @@ namespace Engine {
         }
 
         private void respawnParticle(Particle particle, GameObject gameObject) {
-            //ToDo: Implement respawn logic
+            particle.particlePos.X = gameObject.objectPos.X;
+            particle.particlePos.Y = gameObject.objectPos.Y;
+            particle.life = 10f;
         }
+    }
 
+    public static class testFuck {
+        public static ParticleManager mm = new ParticleManager("carexaust", "particle", 100);
+        public static void Init(){
+        }
     }
 }
 
