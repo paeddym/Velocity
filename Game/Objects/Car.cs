@@ -128,6 +128,9 @@ namespace GameApp{
                 _collisionAnimActive = false;
             }
 
+            ParticleManager.Emit(_car, _speed);
+            ParticleManager.Update(_deltaTime);
+
             _camera.UseLockCam(_car.objectPos.X, _car.objectPos.Y, _car.objectPos.W);
         }
 

@@ -1,4 +1,5 @@
 using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 
 namespace Engine {
     public class Shader {
@@ -73,10 +74,21 @@ namespace Engine {
             }
         }
 
-        public void SetInt(string name, int value) {
+        public void SetMatrix4(string name, Matrix4 data){
             int location = GL.GetUniformLocation(Handle, name);
-            GL.Uniform1(location, value);
+            GL.UniformMatrix4(location, false, ref data);
         }
+
+        public void SetFloat(string name, float data){
+            int location = GL.GetUniformLocation(Handle, name);
+            GL.Uniform1(location, data);
+        }
+
+        public void SetInt(string name, int data){
+            int location = GL.GetUniformLocation(Handle, name);
+            GL.Uniform1(location, data);
+        }
+
 
         ~Shader()
         {
