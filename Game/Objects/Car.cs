@@ -123,7 +123,6 @@ namespace GameApp{
             _car.objectPos.X = _car.objectPos.X + _car.front.X * _speed;
             _car.objectPos.Y = _car.objectPos.Y + _car.front.Y * _speed;
 
-            // Deactivate collision animation if duration has passed
             if (_collisionAnimActive && (GameLoop.CurrentTime - _collisionAnimStartTime) > _collisionAnimDuration)
             {
                 _collisionAnimActive = false;
@@ -145,7 +144,14 @@ namespace GameApp{
                 float[] hit = MapBuilder.CheckCollision(GameLoop._trackName, point.X, point.Y);
                 if (hit[2] != -1) {
                     if (hit[2] == 0) {
-                        this._speed = (this._speed*(-1));
+                        Vector2 velocity = _car.front * _speed;
+                        Vector2 normal = EstimateWallNormal(point);
+                        Vector2 reflected = Reflect(velocity, normal);
+
+                        _car.objectPos.W = -MathF.Atan2(reflected.X, reflected.Y);
+                        _speed = reflected.Length * 1f;
+
+
                         _collisionAnimActive = true;
                         _collisionAnimStartTime = GameLoop.CurrentTime;
                         _collisionAnimPosition = point;
@@ -160,6 +166,35 @@ namespace GameApp{
                 }
             }
             return empty;
+        }
+
+        private Vector2 EstimateWallNormal(Vector2 point)
+        {
+            float offset = 0.05f; // World units
+            float alphaCenter = MapBuilder.CheckCollision(GameLoop._trackName, point.X, point.Y)[2];
+            float alphaRight = MapBuilder.CheckCollision(GameLoop._trackName, point.X + offset, point.Y)[2];
+            float alphaLeft = MapBuilder.CheckCollision(GameLoop._trackName, point.X - offset, point.Y)[2];
+            float alphaUp = MapBuilder.CheckCollision(GameLoop._trackName, point.X, point.Y + offset)[2];
+            float alphaDown = MapBuilder.CheckCollision(GameLoop._trackName, point.X, point.Y - offset)[2];
+
+            // Simple central difference to approximate gradient
+            float gradX = alphaRight - alphaLeft;
+            float gradY = alphaUp - alphaDown;
+
+            Vector2 normal = new Vector2(gradX, gradY);
+
+            if (normal.LengthSquared > 0.0001f)
+                normal = Vector2.Normalize(normal);
+            else
+                normal = -_car.front; // Fallback to opposite of direction
+
+            return normal;
+        }
+
+        private Vector2 Reflect(Vector2 velocity, Vector2 normal)
+        {
+            // Reflection formula: R = V - 2 * (V • N) * N
+            return velocity - 2 * Vector2.Dot(velocity, normal) * normal;
         }
 
         public float getSpeed()

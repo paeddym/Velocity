@@ -21,6 +21,8 @@
     <None Remove="shaders\animation.vert" />
     <None Remove="shaders\default.frag" />
     <None Remove="shaders\default.vert" />
+    <None Remove="shaders\particle.frag" />
+    <None Remove="shaders\particle.vert" />
     <None Remove="shaders\textUI.frag" />
     <None Remove="shaders\textUI.vert" />
   </ItemGroup>
@@ -35,6 +37,12 @@
     </Content>
     <Content Include="shaders\default.vert">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="shaders\particle.frag">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="shaders\particle.vert">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="shaders\textUI.frag">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
