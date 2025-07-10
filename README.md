@@ -3,14 +3,11 @@ A racing game written in C# using OpenTK
 
 # Controls
 - WASD: Steering
+- Arrow Keys: Navigate menus
+- Enter: Confirm
 - Escape: Pause Menu
 
-# TODO
-## Compulsory
-- Make map prettier
-- Add particles
-
-## Optional
+## Future improvements (?)
 - AI enemies
 - Items system
 - Dynamic events on racetrack
