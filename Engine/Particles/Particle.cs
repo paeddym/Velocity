@@ -17,7 +17,7 @@ namespace Engine{
             Velocity = velocity;
             Lifetime = lifetime;
             Age = 0f;
-            Size = 1f;
+            Size = .2f;
 
             _obj = new GameObject("particle", "particleTex");
         }
@@ -27,11 +27,11 @@ namespace Engine{
             Position += Velocity;
 
             float lifeRatio = 1.0f - (Age / Lifetime);
-            Size = 0.5f + (1.0f - lifeRatio) * 1.5f;
+            Size = 0.7f + (.5f - lifeRatio) * 1.01f;
 
             _obj.objectPos.X = Position.X;
             _obj.objectPos.Y = Position.Y;
-            _obj.objectPos.Z = .1f;
+            _obj.objectPos.Z = .2f;
             _obj.scale = Size;
         }
 
