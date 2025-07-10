@@ -22,3 +22,6 @@ A racing game written in C# using OpenTK
 - install the dotnet 8 framework from the arch arcive with 'pacman -U'
 - start the session with x11 instead of Wayland as OpenGL is buggy with Wayland
 - build an run with 'dotnet build' 'dotnet run' in this order at the root of the project where the '.sln and .csproj' life
+
+### External Asset Sources
+- [Collision animation spritesheet](https://bdragon1727.itch.io/free-smoke-fx-pixel-2)
