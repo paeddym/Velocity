@@ -29,7 +29,7 @@ namespace GameApp{
             this._name = name;
             this._camera = camera;
             this._car = ObjectManager.GetGameObject(this._name);
-            this._car.objectPos.X = -15.5f;
+            this._car.objectPos.X = -23.5f;
             this._car.objectPos.Y = 0.3f;
         }
 
@@ -77,6 +77,7 @@ namespace GameApp{
             // Apply input
             if (_keyboardState.IsKeyDown(Keys.W)){
                 _speed += acceleration * _deltaTime;
+                ParticleManager.Emit(_car, _speed);
                 if (_speed > maxSpeed) _speed = maxSpeed;
             }
             else if (_keyboardState.IsKeyDown(Keys.S)){
@@ -128,6 +129,8 @@ namespace GameApp{
                 _collisionAnimActive = false;
             }
 
+            ParticleManager.Update(_deltaTime);
+
             _camera.UseLockCam(_car.objectPos.X, _car.objectPos.Y, _car.objectPos.W);
         }
 
@@ -149,11 +152,9 @@ namespace GameApp{
                     }
                     if(hit[2] == 102) {
                         _dummyStart = true;
-                        Console.WriteLine("Car crosses start/finish line");
                         GameLoop.HandleLapping(102);
                                             }
                     if(hit[2] == 127) {
-                        Console.WriteLine("Car crosses checkpoint line");
                         GameLoop.HandleLapping(127);                  
                     }
                 }

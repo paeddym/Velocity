@@ -84,6 +84,7 @@ namespace GameApp{
             }
             if (GameStateManager.IsState(GameStateManager.GameState.Playing)){
                 ObjectManager.DrawAll();
+                ParticleManager.Draw();
 
                 var car = GameLoop.CarInstance;
                 if (car.CollisionAnimActive)
@@ -263,7 +264,10 @@ namespace GameApp{
             ResourceManager.LoadShader("default", "shaders/default.vert", "shaders/default.frag");
             ResourceManager.LoadShader("text", "shaders/textUI.vert", "shaders/textUI.frag");
             ResourceManager.LoadShader("animation", "shaders/animation.vert", "shaders/animation.frag");
+            ResourceManager.LoadShader("particle", "shaders/particle.vert", "shaders/particle.frag");
 
+            ResourceManager.LoadTexture("particleTex", "recources/particles/Dustcloud_small.png");
+            ParticleManager.Initialize();
             AnimationRenderer.Initialize();
 
             TextRenderer.Initialize();

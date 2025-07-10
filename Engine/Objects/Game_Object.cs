@@ -11,7 +11,7 @@ namespace Engine {
         public Vector4 objectPos = new Vector4(.0f, .0f, .0f, .0f);
         public Vector2 front = new Vector2(.0f, .0f);
         public float scale = 1f;
-        private Vector3 scaleVector = new Vector3(1f, 1f, 1f);
+        public Vector3 scaleVector = new Vector3(1f, 1f, 0f);
 
         private Shader _shader;
         private Texture _texture;
@@ -50,8 +50,10 @@ namespace Engine {
         public void Draw() {
             this._shader.Use();
             this._texture.Use();
-            scaleVector.X = scale;
-            scaleVector.Y = scale;
+            if (scale != 0) {
+                scaleVector.X = scale;
+                scaleVector.Y = scale;
+            }
 
             if(VertexBufferObject == -1) {
                 Shapes.BindQuad();
