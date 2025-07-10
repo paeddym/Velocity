@@ -194,15 +194,19 @@ namespace GameApp{
             else if (GameStateManager.IsState(GameStateManager.GameState.Finished)){
                 if (KeyboardState.IsKeyPressed(Keys.Escape))
                     Close();
-                if (KeyboardState.IsKeyPressed(Keys.Enter))
+                if (KeyboardState.IsKeyPressed(Keys.Enter)){
+                    ParticleManager.Reset();
                     GameStateManager.ChangeState(GameStateManager.GameState.MainMenu);
+                }
             }
 
             else if (GameStateManager.IsState(GameStateManager.GameState.Paused)){
                 if (KeyboardState.IsKeyPressed(Keys.Escape))
                     GameStateManager.ChangeState(GameStateManager.GameState.Playing);
-                if (KeyboardState.IsKeyPressed(Keys.Enter))
+                if (KeyboardState.IsKeyPressed(Keys.Enter)){
+                    ParticleManager.Reset();
                     GameStateManager.ChangeState(GameStateManager.GameState.MainMenu);
+                }
             }
         }
 
