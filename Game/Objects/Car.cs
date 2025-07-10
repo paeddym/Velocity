@@ -29,7 +29,7 @@ namespace GameApp{
             this._name = name;
             this._camera = camera;
             this._car = ObjectManager.GetGameObject(this._name);
-            this._car.objectPos.X = -15.5f;
+            this._car.objectPos.X = -23.5f;
             this._car.objectPos.Y = 0.3f;
         }
 

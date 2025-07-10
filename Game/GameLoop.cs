@@ -1,6 +1,7 @@
 using Engine;
 using OpenTK.Windowing.Common;
 using System.Drawing;
+using OpenTK.Mathematics;
 
 namespace GameApp{
     public static class GameLoop{
@@ -81,7 +82,8 @@ namespace GameApp{
             _trackName = track;
 
             GameObject _map = new GameObject(track, track);
-            _map.scale = 40f;
+            _map.scale = 0f;
+            _map.scaleVector = new Vector3(60f, 40f, 0f);
             ObjectManager.AddGameObject(_map);
 
             GameObject test = new GameObject(car, car);

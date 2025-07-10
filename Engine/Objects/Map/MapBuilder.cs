@@ -17,8 +17,8 @@ namespace Engine {
             float[] collision = {0f, 0f, 0f};
             collision = collisionMap.IsSolid(carPosX, carPoxY, mapObj.objectPos.X, 
                     mapObj.objectPos.Y, 
-                    mapObj.scale, 
-                    mapObj.scale);
+                    mapObj.scaleVector.X, 
+                    mapObj.scaleVector.Y);
 
             return collision;
         }
