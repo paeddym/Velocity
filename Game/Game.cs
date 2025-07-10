@@ -52,8 +52,10 @@ namespace GameApp{
             base.OnRenderFrame(e);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            Vector3 color = new Vector3(0.5f, 0.8f, 0.2f);
-       
+            Vector3 color = new Vector3(0.2f, 0.2f, 0.8f);
+            Vector3 colorGreen = new Vector3(0.5f, 0.8f, 0.2f);
+            Vector3 colorRed = new Vector3 (0.8f, 0.2f, 0.2f);
+
             if (GameStateManager.IsState(GameStateManager.GameState.MainMenu)){
                 TextRenderer.RenderText("text", "Welcome to Velocity", 130f, 500f, 0.7f, color);
                 TextRenderer.RenderText("text", "be a racer", 200f, 480f, 0.4f, color);
@@ -89,18 +91,16 @@ namespace GameApp{
                 var car = GameLoop.CarInstance;
                 if (car.CollisionAnimActive)
                 {
-                    float zoom = 20f; // Use your game's zoom factor
-                    var camera = GameLoop.CameraInstance;
-                    // Get camera rotation (rotZ) from car's GameObject
+                    float zoom = 20f;
+                    var camera = GameLoop.CameraInstance;               
                     float rotZ = car.GetGameObject().objectPos.W;
-                    // Animation world position relative to camera
                     var rel = car.CollisionAnimPosition - new Vector2(camera.position.X, camera.position.Y);
-                    // Rotate by -rotZ
+
                     float cos = (float)Math.Cos(-rotZ);
                     float sin = (float)Math.Sin(-rotZ);
                     float rx = rel.X * cos - rel.Y * sin;
                     float ry = rel.X * sin + rel.Y * cos;
-                    // Convert to screen coordinates
+
                     float screenX = rx * zoom + 400;
                     float screenY = ry * zoom + 300;
                     var animScreenPos = new Vector2(screenX, screenY);
@@ -120,7 +120,7 @@ namespace GameApp{
                 TextRenderer.RenderText("text", GameLoop.TrackRecord < double.MaxValue ? $"Record: {FormatHelper.FormatTime(GameLoop.TrackRecord)}" : "", 30f, 570f, 0.4f, color);                
                 TextRenderer.RenderText("text", GameLoop.BestLapTime < double.MaxValue ? $"Best: {FormatHelper.FormatTime(GameLoop.BestLapTime)}" : "", 550f, 540f, 0.4f, color);
                 if(GameLoop.ShowSplits && GameLoop.ShowSplitsTimer > 0){
-                    TextRenderer.RenderText("text", $"{FormatHelper.FormatSplitTime(GameLoop.SplitDifference)}s", 330f, 540f, 0.4f, GameLoop.SplitDifference < 0 ? color : new Vector3(0.8f, 0.2f, 0.2f));
+                    TextRenderer.RenderText("text", $"{FormatHelper.FormatSplitTime(GameLoop.SplitDifference)}s", 330f, 540f, 0.4f, GameLoop.SplitDifference < 0 ? colorGreen : colorRed);
                     GameLoop.ShowSplitsTimer -= e.Time;
                 }
 
