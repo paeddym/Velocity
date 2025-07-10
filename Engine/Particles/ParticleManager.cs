@@ -48,5 +48,9 @@ namespace Engine{
             // Restore state
             GL.DepthMask(true);
         }
+
+        public static void Reset() {
+            particles = new();
+        }
     }
 }
