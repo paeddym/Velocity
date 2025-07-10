@@ -1,0 +1,34 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35919.96
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{1D3DA7C3-3CC4-40F7-A788-F3AF45A547F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game", "Game\Game.csproj", "{303BC176-D550-489A-B1EB-41C2B7C771E7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E810FD73-D5F2-BAE0-973F-5E5D65D83E6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E810FD73-D5F2-BAE0-973F-5E5D65D83E6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E810FD73-D5F2-BAE0-973F-5E5D65D83E6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E810FD73-D5F2-BAE0-973F-5E5D65D83E6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D3DA7C3-3CC4-40F7-A788-F3AF45A547F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D3DA7C3-3CC4-40F7-A788-F3AF45A547F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D3DA7C3-3CC4-40F7-A788-F3AF45A547F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D3DA7C3-3CC4-40F7-A788-F3AF45A547F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{303BC176-D550-489A-B1EB-41C2B7C771E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{303BC176-D550-489A-B1EB-41C2B7C771E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{303BC176-D550-489A-B1EB-41C2B7C771E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{303BC176-D550-489A-B1EB-41C2B7C771E7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3A9DE530-A4CF-4A55-93F0-519D3091CF50}
+	EndGlobalSection
+EndGlobal
