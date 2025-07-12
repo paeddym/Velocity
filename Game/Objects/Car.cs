@@ -10,7 +10,8 @@ namespace GameApp{
         private string _name;
         private Camera _camera;
         private GameObject _car;
-        private bool _dummyStart = false;
+
+        private bool _trackTwoStart = false;
 
         Vector2[] localOffsets;
         List<Vector2> hitboxPoints;
@@ -29,11 +30,21 @@ namespace GameApp{
             this._name = name;
             this._camera = camera;
             this._car = ObjectManager.GetGameObject(this._name);
-            this._car.objectPos.X = -23.5f;
+
+            this._car.objectPos.X = -20.5f;
             this._car.objectPos.Y = 0.3f;
         }
 
         public void Drive() {
+            if (GameLoop._trackName == "track2" && _trackTwoStart == false){
+                Console.WriteLine($"Set car pos for track2: {GameLoop._trackName}");
+                _car.objectPos.X = -18f;
+                _trackTwoStart = true;
+            }
+            if (GameLoop._trackName != "track2") {
+                _trackTwoStart = false;
+            }
+
             FrameEventArgs _event = InputProvider.GetFrameEvent();
             float _deltaTime = (float)_event.Time;
             KeyboardState _keyboardState = InputProvider.GetKeyboardState();
@@ -151,7 +162,6 @@ namespace GameApp{
                         _collisionAnimPosition = point;
                     }
                     if(hit[2] == 102) {
-                        _dummyStart = true;
                         GameLoop.HandleLapping(102);
                                             }
                     if(hit[2] == 127) {
